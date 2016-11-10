@@ -23,6 +23,7 @@
         app:itemTextColor="@android:color/white"
         app:menu="@menu/bottom_navigation_view"
         app:layout_anchor="@id/fragment_container"
+        app:layout_behavior="io.b1ackr0se.bridddle.ui.bottomnavigation.BottomNavigationBehavior"
         app:layout_anchorGravity="bottom"/>
 
 </android.support.design.widget.CoordinatorLayout>
