@@ -19,17 +19,19 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.b1ackr0se.bridddle.MainActivity;
 import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
+import io.b1ackr0se.bridddle.ui.ProgressCallback;
 
 public class HomeFragment extends Fragment implements HomeView, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
-    @BindView(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
     @Inject HomePresenter presenter;
 
     private HomeAdapter adapter;
     private List<Shot> shots = new ArrayList<>();
+    private ProgressCallback progressCallback;
 
     public HomeFragment() {
 
@@ -43,9 +45,7 @@ public class HomeFragment extends Fragment implements HomeView, SwipeRefreshLayo
         ButterKnife.bind(this, view);
         ((BaseActivity) getActivity()).getActivityComponent().inject(this);
 
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
-        swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), android.R.color.white));
-        swipeRefreshLayout.setOnRefreshListener(this);
+        progressCallback = (MainActivity) getActivity();
 
         adapter = new HomeAdapter(shots);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
@@ -53,20 +53,14 @@ public class HomeFragment extends Fragment implements HomeView, SwipeRefreshLayo
 
         presenter.attachView(this);
 
-        showProgress(true);
+        presenter.loadShots();
 
         return view;
     }
 
     @Override
     public void showProgress(boolean show) {
-        if (show) {
-            swipeRefreshLayout.post(() -> {
-               swipeRefreshLayout.setRefreshing(true);
-                presenter.loadShots();
-            });
-        } else
-            swipeRefreshLayout.setRefreshing(false);
+        progressCallback.showProgress(show);
     }
 
     @Override

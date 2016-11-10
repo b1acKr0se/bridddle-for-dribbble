@@ -15,7 +15,7 @@ import rx.schedulers.Schedulers;
 
 public class HomePresenter extends BasePresenter<HomeView> {
     private Subscription subscription;
-    DribbbleApi dribbbleApi;
+    private DribbbleApi dribbbleApi;
 
     @Inject
     public HomePresenter(DribbbleApi api) {
@@ -29,23 +29,23 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
 
     void loadShots() {
-        subscription = dribbbleApi.getPopular(0,50).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        subscription = dribbbleApi.getPopular(0, 50).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Shot>>() {
-            @Override
-            public void onCompleted() {
+                    @Override
+                    public void onCompleted() {
 
-            }
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                e.printStackTrace();
-                getView().showError();
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        getView().showError();
+                    }
 
-            @Override
-            public void onNext(List<Shot> shots) {
-                getView().showShots(shots);
-            }
-        });
+                    @Override
+                    public void onNext(List<Shot> shots) {
+                        getView().showShots(shots);
+                    }
+                });
     }
 }
