@@ -4,4 +4,11 @@
     <color name="colorPrimaryDark">#282828</color>
     <color name="colorAccent">#ea4c89</color>
     <color name="translucentStatus">#64000000</color>
+    <color name="transparent">#55000000</color>
+
+    <array name="placeholder">
+        <item>#232323</item>
+        <item>#333333</item>
+        <item>#1e1e1e</item>
+    </array>
 </resources>

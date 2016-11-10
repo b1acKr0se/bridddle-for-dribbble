@@ -3,9 +3,22 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content">
 
-    <io.b1ackr0se.bridddle.ui.widget.SquareImageView
+    <io.b1ackr0se.bridddle.ui.widget.AspectRatioImageView
         android:id="@+id/shot_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/gif_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@drawable/gif_indicator_drawable"
+        android:layout_margin="8dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:text="GIF"
+        android:textColor="@android:color/white"
+        android:visibility="invisible"/>
 </FrameLayout>
