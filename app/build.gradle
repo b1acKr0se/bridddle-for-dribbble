@@ -21,6 +21,8 @@ android {
         buildConfigField "String", "DRIBBBLE_CLIENT_ID", "\"${DRIBBBLE_CLIENT_ID}\""
         buildConfigField "String", "DRIBBBLE_CLIENT_SECRET", "\"${DRIBBBLE_CLIENT_SECRET}\""
         buildConfigField "String", "DRIBBBLE_ACCESS_TOKEN", "\"${DRIBBBLE_ACCESS_TOKEN}\""
+
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -53,6 +55,8 @@ dependencies {
     compile "com.android.support:design:${supportLibVersion}"
     compile "com.android.support:palette-v7:${supportLibVersion}"
     compile "com.android.support:recyclerview-v7:${supportLibVersion}"
+
+    compile 'com.roughike:bottom-bar:2.0.2'
 
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'

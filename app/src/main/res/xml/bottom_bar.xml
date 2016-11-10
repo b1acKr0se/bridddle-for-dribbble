@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        id="@+id/action_dashboard"
+        icon="@drawable/dashboard"
+        title="@string/home"/>
+    <tab
+        id="@+id/search"
+        icon="@drawable/search"
+        title="@string/search"/>
+    <tab
+        id="@+id/favorite"
+        icon="@drawable/like"
+        title="@string/favorite"/>
+    <tab
+        id="@+id/profile"
+        icon="@drawable/profile"
+        title="@string/profile"/>
+</tabs>
