@@ -42,7 +42,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        getView().showError();
+                        if(currentPage == 1) {
+                            getView().showError();
+                        }
                     }
 
                     @Override

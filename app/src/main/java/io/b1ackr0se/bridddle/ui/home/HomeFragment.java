@@ -27,6 +27,7 @@ import io.b1ackr0se.bridddle.ui.ProgressCallback;
 public class HomeFragment extends Fragment implements HomeView, OnShotClick {
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.root) FrameLayout root;
+    @BindView(R.id.no_internet) View noInternetIndicator;
     @Inject HomePresenter presenter;
 
     private HomeAdapter adapter;
@@ -88,6 +89,8 @@ public class HomeFragment extends Fragment implements HomeView, OnShotClick {
 
     @Override
     public void showShots(List<Shot> list) {
+        noInternetIndicator.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
         showProgress(false);
         if (!shots.isEmpty())
             shots.remove(shots.size() - 1);
@@ -99,7 +102,9 @@ public class HomeFragment extends Fragment implements HomeView, OnShotClick {
 
     @Override
     public void showError() {
-
+        showProgress(false);
+        recyclerView.setVisibility(View.GONE);
+        noInternetIndicator.setVisibility(View.VISIBLE);
     }
 
     @Override
