@@ -3,8 +3,11 @@ package io.b1ackr0se.bridddle.data.remote.dribbble;
 
 import java.util.List;
 
+import io.b1ackr0se.bridddle.data.model.AccessToken;
 import io.b1ackr0se.bridddle.data.model.Shot;
+import io.b1ackr0se.bridddle.data.model.User;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -13,4 +16,7 @@ public interface DribbbleApi {
 
     @GET("v1/shots")
     Observable<List<Shot>> getPopular(@Query("page") Integer page, @Query("per_page") Integer pageSize);
+
+    @GET("v1/user")
+    Observable<User> getAuthenticatedUser();
 }
