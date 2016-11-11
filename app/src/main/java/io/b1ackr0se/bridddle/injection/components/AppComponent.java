@@ -7,7 +7,9 @@ import javax.inject.Singleton;
 import dagger.Component;
 import io.b1ackr0se.bridddle.App;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleApi;
+import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleAuthenticator;
 import io.b1ackr0se.bridddle.injection.modules.AppModule;
+import io.b1ackr0se.bridddle.util.SharedPref;
 
 @Singleton
 @Component(modules = AppModule.class)
@@ -17,4 +19,8 @@ public interface AppComponent {
     Application application();
 
     DribbbleApi client();
+
+    DribbbleAuthenticator authenticator();
+
+    SharedPref sharedPref();
 }
