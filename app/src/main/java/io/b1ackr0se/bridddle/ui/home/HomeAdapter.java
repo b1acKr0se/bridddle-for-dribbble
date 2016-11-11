@@ -24,10 +24,15 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Shot> shots;
     private TypedArray placeHolderColor;
+    private OnShotClick onShotClick;
 
     public HomeAdapter(Context context, List<Shot> list) {
         this.shots = list;
         placeHolderColor = context.getResources().obtainTypedArray(R.array.placeholder);
+    }
+
+    void setOnShotClick(OnShotClick onShotClick) {
+        this.onShotClick = onShotClick;
     }
 
     @Override
@@ -47,6 +52,11 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (viewHolder instanceof ShotViewHolder) {
             ShotViewHolder holder = (ShotViewHolder) viewHolder;
             Shot shot = shots.get(position);
+
+            holder.itemView.setOnLongClickListener(l -> {
+                onShotClick.onLongClick(shot);
+                return true;
+            });
 
             holder.shotImageView.setBackgroundColor(placeHolderColor.getColor((position % placeHolderColor.length()), 0));
 

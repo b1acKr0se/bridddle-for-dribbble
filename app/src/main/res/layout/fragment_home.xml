@@ -4,12 +4,13 @@
                 android:layout_height="match_parent"
                 tools:context="io.b1ackr0se.bridddle.ui.home.HomeFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <io.b1ackr0se.bridddle.ui.widget.GridRecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="-26dp"
         android:clipToPadding="false"
+        android:layoutAnimation="@anim/grid_layout_animation"
         android:fitsSystemWindows="true"/>
 
 </FrameLayout>
