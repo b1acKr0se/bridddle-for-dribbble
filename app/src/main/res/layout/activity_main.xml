@@ -9,11 +9,12 @@
     android:paddingTop="-25dp"
     tools:context="io.b1ackr0se.bridddle.MainActivity">
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
+    <io.b1ackr0se.bridddle.ui.widget.SlideDisabledViewPager
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    </io.b1ackr0se.bridddle.ui.widget.SlideDisabledViewPager>
 
     <ProgressBar
         android:layout_width="wrap_content"
