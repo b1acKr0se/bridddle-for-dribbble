@@ -1,8 +1,12 @@
 package io.b1ackr0se.bridddle.ui.profile;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import io.b1ackr0se.bridddle.base.BasePresenter;
+import io.b1ackr0se.bridddle.data.model.LikedShot;
+import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.model.User;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleApi;
 import rx.Observable;
@@ -15,7 +19,7 @@ import rx.subscriptions.CompositeSubscription;
 public class ProfilePresenter extends BasePresenter<ProfileView> {
 
     private CompositeSubscription subscription;
-    User authUser;
+    private User authUser;
     private DribbbleApi api;
 
     @Inject
@@ -31,6 +35,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
             subscription.add(
                     api.getAuthenticatedUser()
                             .subscribeOn(Schedulers.io())
+                            .doOnNext(user -> loadLikedShots())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Subscriber<User>() {
                                 @Override
@@ -51,6 +56,33 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
                             }));
 
         }
+    }
+
+    void loadLikedShots() {
+        subscription.add(
+                api.getLikesOfAuthenticatedUser()
+                        .subscribeOn(Schedulers.io())
+                        .flatMap(Observable::from)
+                        .map(LikedShot::getShot)
+                        .toList()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<List<Shot>>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onNext(List<Shot> list) {
+                                getView().showLikedShots(list);
+                            }
+                        })
+        );
     }
 
     @Override

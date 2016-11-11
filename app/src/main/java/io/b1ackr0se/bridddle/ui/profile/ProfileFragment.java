@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -18,16 +21,21 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
+import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.model.User;
+import io.b1ackr0se.bridddle.ui.home.HomeAdapter;
 
 public class ProfileFragment extends Fragment implements ProfileView {
-
+    @BindView(R.id.nested_scroll_view) NestedScrollView nestedScrollView;
     @BindView(R.id.avatar) ImageView avatar;
     @BindView(R.id.name) TextView name;
     @BindView(R.id.username) TextView username;
@@ -35,8 +43,12 @@ public class ProfileFragment extends Fragment implements ProfileView {
     @BindView(R.id.likes_received_count) TextView likesCount;
     @BindView(R.id.follower_count) TextView followerCount;
     @BindView(R.id.bio) TextView bio;
+    @BindView(R.id.recycler_view) RecyclerView recyclerView;
 
     @Inject ProfilePresenter presenter;
+
+    private HomeAdapter homeAdapter;
+    private List<Shot> shots = new ArrayList<>();
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -46,6 +58,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
+            nestedScrollView.post(() -> nestedScrollView.scrollTo(0, 0));
             presenter.getAuthUser();
         }
     }
@@ -57,6 +70,13 @@ public class ProfileFragment extends Fragment implements ProfileView {
         ButterKnife.bind(this, view);
         ((BaseActivity)getActivity()).getActivityComponent().inject(this);
         presenter.attachView(this);
+
+        recyclerView.setClipToPadding(false);
+        recyclerView.setPadding(0, getResources().getDimensionPixelSize(R.dimen.profile_recycler_view_padding_top), 0, getResources().getDimensionPixelSize(R.dimen.navigation_bar_height));
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        homeAdapter = new HomeAdapter(getContext(), shots);
+        recyclerView.setAdapter(homeAdapter);
 
         return view;
     }
@@ -82,5 +102,12 @@ public class ProfileFragment extends Fragment implements ProfileView {
         followerCount.setText(String.valueOf(user.getFollowersCount()));
         likesCount.setText(String.valueOf(user.getLikesReceivedCount()));
             bio.setText(Html.fromHtml("Co-founder &amp; designer of <a href=\\\"https://dribbble.com/dribbble\\\">@Dribbble</a>. Principal of SimpleBits. Aspiring clawhammer banjoist."));
+    }
+
+    @Override
+    public void showLikedShots(List<Shot> list) {
+        shots.clear();
+        shots.addAll(list);
+        homeAdapter.notifyDataSetChanged();
     }
 }
