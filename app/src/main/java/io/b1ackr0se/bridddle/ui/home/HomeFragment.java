@@ -34,7 +34,7 @@ public class HomeFragment extends Fragment implements HomeView, OnShotClick {
     private ProgressCallback progressCallback;
     private EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
 
-    GridLayoutManager.SpanSizeLookup onSpanSizeLookup = new GridLayoutManager.SpanSizeLookup() {
+    private final GridLayoutManager.SpanSizeLookup onSpanSizeLookup = new GridLayoutManager.SpanSizeLookup() {
         @Override
         public int getSpanSize(int position) {
             return adapter.getItemViewType(position) == HomeAdapter.TYPE_ITEM ? 1 : 2;

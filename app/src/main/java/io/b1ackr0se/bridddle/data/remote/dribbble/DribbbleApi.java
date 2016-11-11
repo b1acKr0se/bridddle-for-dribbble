@@ -4,6 +4,7 @@ package io.b1ackr0se.bridddle.data.remote.dribbble;
 import java.util.List;
 
 import io.b1ackr0se.bridddle.data.model.AccessToken;
+import io.b1ackr0se.bridddle.data.model.LikedShot;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.model.User;
 import retrofit2.http.GET;
@@ -19,4 +20,7 @@ public interface DribbbleApi {
 
     @GET("v1/user")
     Observable<User> getAuthenticatedUser();
+
+    @GET("v1/user/likes")
+    Observable<List<LikedShot>> getLikesOfAuthenticatedUser();
 }
