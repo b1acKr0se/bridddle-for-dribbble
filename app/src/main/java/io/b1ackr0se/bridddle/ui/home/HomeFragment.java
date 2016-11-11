@@ -23,7 +23,7 @@ import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.ui.EndlessRecyclerOnScrollListener;
 import io.b1ackr0se.bridddle.ui.ProgressCallback;
 
-public class HomeFragment extends Fragment implements HomeView {
+public class HomeFragment extends Fragment implements HomeView, OnShotClick {
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @Inject HomePresenter presenter;
 
@@ -53,6 +53,7 @@ public class HomeFragment extends Fragment implements HomeView {
         progressCallback = (MainActivity) getActivity();
 
         adapter = new HomeAdapter(getContext(), shots);
+        adapter.setOnShotClick(this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         gridLayoutManager.setSpanSizeLookup(onSpanSizeLookup);
         endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(gridLayoutManager) {
@@ -60,7 +61,7 @@ public class HomeFragment extends Fragment implements HomeView {
             public void onLoadMore() {
                 shots.add(null);
                 adapter.notifyItemInserted(shots.size() - 1);
-                presenter.loadShots(false);
+                presenter.loadShots();
             }
         };
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -69,7 +70,7 @@ public class HomeFragment extends Fragment implements HomeView {
 
         presenter.attachView(this);
 
-        presenter.loadShots(true);
+        presenter.loadShots();
 
         return view;
     }
@@ -84,6 +85,7 @@ public class HomeFragment extends Fragment implements HomeView {
         showProgress(false);
         if (!shots.isEmpty())
             shots.remove(shots.size() - 1);
+        else recyclerView.scheduleLayoutAnimation();
         endlessRecyclerOnScrollListener.setLoaded();
         shots.addAll(list);
         adapter.notifyDataSetChanged();
@@ -91,6 +93,16 @@ public class HomeFragment extends Fragment implements HomeView {
 
     @Override
     public void showError() {
+
+    }
+
+    @Override
+    public void onClick(Shot shot) {
+
+    }
+
+    @Override
+    public void onLongClick(Shot shot) {
 
     }
 }

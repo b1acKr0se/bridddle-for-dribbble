@@ -5,6 +5,7 @@
     <color name="colorAccent">#ea4c89</color>
     <color name="translucentStatus">#64000000</color>
     <color name="transparent">#55000000</color>
+    <color name="login_transparent">#e5000000</color>
 
     <array name="placeholder">
         <item>#232323</item>

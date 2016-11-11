@@ -30,8 +30,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
         subscription.unsubscribe();
     }
 
-    void loadShots(boolean firstPage) {
-        subscription = dribbbleApi.getPopular(currentPage, PER_PAGE).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    void loadShots() {
+        subscription = dribbbleApi.getPopular(currentPage, PER_PAGE)
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Shot>>() {
                     @Override
                     public void onCompleted() {
