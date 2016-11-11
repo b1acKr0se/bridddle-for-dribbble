@@ -1,9 +1,12 @@
 package io.b1ackr0se.bridddle;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +22,9 @@ import butterknife.ButterKnife;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.ui.ProgressCallback;
 import io.b1ackr0se.bridddle.ui.common.PagerAdapter;
+import io.b1ackr0se.bridddle.ui.home.HomeFragment;
 import io.b1ackr0se.bridddle.ui.login.DribbbleLoginActivity;
+import io.b1ackr0se.bridddle.ui.search.SearchFragment;
 import io.b1ackr0se.bridddle.ui.widget.AppBarStateListener;
 import io.b1ackr0se.bridddle.ui.widget.SlideDisabledViewPager;
 
@@ -55,6 +60,7 @@ public class MainActivity extends BaseActivity implements ProgressCallback, OnTa
         bottomBar.setOnTabSelectListener(this);
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -63,7 +69,7 @@ public class MainActivity extends BaseActivity implements ProgressCallback, OnTa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.login) {
+        if (item.getItemId() == R.id.login) {
             startActivityForResult(new Intent(this, DribbbleLoginActivity.class), REQUEST_CODE_LOGIN);
         }
         return super.onOptionsItemSelected(item);
@@ -72,8 +78,8 @@ public class MainActivity extends BaseActivity implements ProgressCallback, OnTa
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE_LOGIN) {
-            if(resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE_LOGIN) {
+            if (resultCode == RESULT_OK) {
                 Toast.makeText(this, "Logged in!", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(this, "cancelled!", Toast.LENGTH_LONG).show();
@@ -105,8 +111,10 @@ public class MainActivity extends BaseActivity implements ProgressCallback, OnTa
     }
 
     private void changeTab(int position) {
+        ObjectAnimator alphaAnimation = ObjectAnimator.ofFloat(viewPager, View.ALPHA, 0, 1);
+        alphaAnimation.start();
         viewPager.setCurrentItem(position, false);
-        if(isToolbarShowing)
+        if (isToolbarShowing)
             return;
         appBarLayout.setExpanded(true, true);
     }

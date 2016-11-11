@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import io.b1ackr0se.bridddle.ui.ProgressCallback;
 
 public class HomeFragment extends Fragment implements HomeView, OnShotClick {
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
+    @BindView(R.id.root) FrameLayout root;
     @Inject HomePresenter presenter;
 
     private HomeAdapter adapter;
@@ -52,10 +54,14 @@ public class HomeFragment extends Fragment implements HomeView, OnShotClick {
 
         progressCallback = (MainActivity) getActivity();
 
+        recyclerView.setClipToPadding(false);
+        recyclerView.setPadding(0, 0, 0, getResources().getDimensionPixelSize(R.dimen.navigation_bar_height));
+
         adapter = new HomeAdapter(getContext(), shots);
         adapter.setOnShotClick(this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         gridLayoutManager.setSpanSizeLookup(onSpanSizeLookup);
+
         endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore() {
@@ -64,9 +70,9 @@ public class HomeFragment extends Fragment implements HomeView, OnShotClick {
                 presenter.loadShots();
             }
         };
+        recyclerView.addOnScrollListener(endlessRecyclerOnScrollListener);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapter);
-        recyclerView.addOnScrollListener(endlessRecyclerOnScrollListener);
 
         presenter.attachView(this);
 
