@@ -5,6 +5,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.content.res.AppCompatResources;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -89,14 +90,14 @@ public class ResettableEditText extends EditText implements View.OnTouchListener
     }
 
     private void initIcon() {
-        drawable = ContextCompat.getDrawable(getContext(), R.drawable.clear);
+        drawable = AppCompatResources.getDrawable(getContext(), R.drawable.clear);
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         applyTint(drawable);
         setPadding(getPaddingLeft(), getPaddingTop(), getResources().getDimensionPixelSize(R.dimen.clear_button_padding_right), getPaddingBottom());
     }
 
     void applyTint(Drawable icon) {
-        icon.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(getContext(), android.R.color.white), PorterDuff.Mode.SRC_IN));
+        icon.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(getContext(), R.color.gray600), PorterDuff.Mode.SRC_IN));
     }
 
     private Drawable getDisplayedDrawable() {

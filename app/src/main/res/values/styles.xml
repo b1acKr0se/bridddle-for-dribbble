@@ -23,4 +23,10 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
+    <style name="AppTheme.Search.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/gray100</item>
+        <item name="colorPrimaryDark">@color/gray300</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
 </resources>
