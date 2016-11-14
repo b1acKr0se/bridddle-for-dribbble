@@ -1,6 +1,8 @@
 package io.b1ackr0se.bridddle.ui.profile;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,13 +13,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -29,15 +31,20 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import io.b1ackr0se.bridddle.MainActivity;
 import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.model.User;
 import io.b1ackr0se.bridddle.ui.home.HomeAdapter;
+import io.b1ackr0se.bridddle.ui.login.DribbbleLoginActivity;
 import io.b1ackr0se.bridddle.util.SoftKey;
 
 public class ProfileFragment extends Fragment implements ProfileView, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.nested_scroll_view) NestedScrollView nestedScrollView;
+    @BindView(R.id.profile_view) View profileView;
+    @BindView(R.id.login) Button login;
     @BindView(R.id.avatar) ImageView avatar;
     @BindView(R.id.name) TextView name;
     @BindView(R.id.username) TextView username;
@@ -47,6 +54,13 @@ public class ProfileFragment extends Fragment implements ProfileView, SwipeRefre
     @BindView(R.id.bio) TextView bio;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
+
+    @OnClick(R.id.login)
+    public void login() {
+        Intent intent = new Intent(getActivity(), DribbbleLoginActivity.class);
+        intent.putExtra("command_login", true);
+        startActivityForResult(intent, MainActivity.REQUEST_CODE_LOGIN);
+    }
 
     @Inject ProfilePresenter presenter;
 
@@ -62,7 +76,7 @@ public class ProfileFragment extends Fragment implements ProfileView, SwipeRefre
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             nestedScrollView.post(() -> nestedScrollView.scrollTo(0, 0));
-            presenter.getAuthUser(false);
+            presenter.checkLoginStatus();
         }
     }
 
@@ -93,7 +107,28 @@ public class ProfileFragment extends Fragment implements ProfileView, SwipeRefre
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == MainActivity.REQUEST_CODE_LOGIN) {
+            if (resultCode == Activity.RESULT_OK) {
+                onLoginStatus(true);
+                presenter.getAuthUser(true);
+            } else {
+                onLoginStatus(false);
+                Toast.makeText(getActivity(), "Failed to login!", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.detachView();
+    }
+
+    @Override
     public void showProfile(User user) {
+        onLoginStatus(true);
         Glide.with(getContext()).load(user.getAvatarUrl())
                 .asBitmap()
                 .centerCrop()
@@ -128,7 +163,13 @@ public class ProfileFragment extends Fragment implements ProfileView, SwipeRefre
     }
 
     @Override
+    public void onLoginStatus(boolean isLoggedIn) {
+        profileView.setVisibility(isLoggedIn ? View.VISIBLE : View.GONE);
+        login.setVisibility(isLoggedIn ? View.GONE : View.VISIBLE);
+    }
+
+    @Override
     public void onRefresh() {
-        presenter.getAuthUser(true);
+        presenter.checkLoginStatus();
     }
 }

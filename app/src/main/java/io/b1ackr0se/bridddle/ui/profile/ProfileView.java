@@ -14,4 +14,6 @@ public interface ProfileView extends BaseView {
 
     void showProgress(boolean show);
 
+    void onLoginStatus(boolean isLoggedIn);
+
 }
