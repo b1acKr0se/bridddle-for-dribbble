@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -34,7 +35,7 @@ import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.model.User;
 import io.b1ackr0se.bridddle.ui.home.HomeAdapter;
 
-public class ProfileFragment extends Fragment implements ProfileView {
+public class ProfileFragment extends Fragment implements ProfileView, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.nested_scroll_view) NestedScrollView nestedScrollView;
     @BindView(R.id.avatar) ImageView avatar;
     @BindView(R.id.name) TextView name;
@@ -44,6 +45,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
     @BindView(R.id.follower_count) TextView followerCount;
     @BindView(R.id.bio) TextView bio;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
+    @BindView(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
 
     @Inject ProfilePresenter presenter;
 
@@ -59,7 +61,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             nestedScrollView.post(() -> nestedScrollView.scrollTo(0, 0));
-            presenter.getAuthUser();
+            presenter.getAuthUser(false);
         }
     }
 
@@ -70,6 +72,8 @@ public class ProfileFragment extends Fragment implements ProfileView {
         ButterKnife.bind(this, view);
         ((BaseActivity)getActivity()).getActivityComponent().inject(this);
         presenter.attachView(this);
+
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         recyclerView.setClipToPadding(false);
         recyclerView.setPadding(0, getResources().getDimensionPixelSize(R.dimen.profile_recycler_view_padding_top), 0, getResources().getDimensionPixelSize(R.dimen.navigation_bar_height));
@@ -109,5 +113,15 @@ public class ProfileFragment extends Fragment implements ProfileView {
         shots.clear();
         shots.addAll(list);
         homeAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showProgress(boolean show) {
+        swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(show));
+    }
+
+    @Override
+    public void onRefresh() {
+        presenter.getAuthUser(true);
     }
 }

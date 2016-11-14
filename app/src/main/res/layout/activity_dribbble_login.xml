@@ -25,11 +25,13 @@
 
             <Button
                 android:id="@+id/login"
-                style="@style/Widget.AppCompat.Button.Borderless"
+                android:background="@color/colorAccent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="LOGIN"/>
+                android:textColor="@android:color/white"
+                android:padding="8dp"
+                android:text="LOGIN TO DRIBBBLE"/>
         </FrameLayout>
 
 

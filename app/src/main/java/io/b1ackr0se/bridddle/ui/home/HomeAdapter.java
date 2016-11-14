@@ -14,6 +14,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
 import java.util.List;
+import java.util.Random;
 
 import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.data.model.Shot;
@@ -29,6 +30,14 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public HomeAdapter(Context context, List<Shot> list) {
         this.shots = list;
         placeHolderColor = context.getResources().obtainTypedArray(R.array.placeholder);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        if (shots.get(position) != null) {
+            return shots.get(position).getId();
+        }
+        return new Random().nextLong();
     }
 
     void setOnShotClick(OnShotClick onShotClick) {
@@ -64,7 +73,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             Glide.with(holder.shotImageView.getContext())
                     .load(shot.getImages().getNormal())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(new GlideDrawableImageViewTarget(holder.shotImageView) {
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
