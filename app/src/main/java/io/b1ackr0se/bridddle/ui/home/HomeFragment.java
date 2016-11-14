@@ -25,6 +25,7 @@ import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.ui.EndlessRecyclerOnScrollListener;
+import io.b1ackr0se.bridddle.util.SoftKey;
 
 public class HomeFragment extends Fragment implements HomeView, OnShotClick, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
@@ -56,7 +57,10 @@ public class HomeFragment extends Fragment implements HomeView, OnShotClick, Swi
         ((BaseActivity) getActivity()).getActivityComponent().inject(this);
 
         recyclerView.setClipToPadding(false);
-        recyclerView.setPadding(0, 0, 0, getResources().getDimensionPixelSize(R.dimen.navigation_bar_height));
+
+        if(SoftKey.isAvailable(getActivity())) {
+            recyclerView.setPadding(0, 0, 0, getResources().getDimensionPixelSize(R.dimen.navigation_bar_height));
+        }
 
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(getContext(), R.color.colorAccent));

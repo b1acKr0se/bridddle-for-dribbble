@@ -34,6 +34,7 @@ import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.model.User;
 import io.b1ackr0se.bridddle.ui.home.HomeAdapter;
+import io.b1ackr0se.bridddle.util.SoftKey;
 
 public class ProfileFragment extends Fragment implements ProfileView, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.nested_scroll_view) NestedScrollView nestedScrollView;
@@ -70,13 +71,19 @@ public class ProfileFragment extends Fragment implements ProfileView, SwipeRefre
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
-        ((BaseActivity)getActivity()).getActivityComponent().inject(this);
+        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
         presenter.attachView(this);
 
         swipeRefreshLayout.setOnRefreshListener(this);
 
         recyclerView.setClipToPadding(false);
-        recyclerView.setPadding(0, getResources().getDimensionPixelSize(R.dimen.profile_recycler_view_padding_top), 0, getResources().getDimensionPixelSize(R.dimen.navigation_bar_height));
+
+        if (SoftKey.isAvailable(getActivity())) {
+            recyclerView.setPadding(0, getResources().getDimensionPixelSize(R.dimen.profile_recycler_view_padding_top), 0, getResources().getDimensionPixelSize(R.dimen.navigation_bar_height));
+        } else {
+            recyclerView.setPadding(0, getResources().getDimensionPixelSize(R.dimen.profile_recycler_view_padding_top), 0, 0);
+        }
+
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         homeAdapter = new HomeAdapter(getContext(), shots);
@@ -105,7 +112,7 @@ public class ProfileFragment extends Fragment implements ProfileView, SwipeRefre
         shotCount.setText(String.valueOf(user.getShotsCount()));
         followerCount.setText(String.valueOf(user.getFollowersCount()));
         likesCount.setText(String.valueOf(user.getLikesReceivedCount()));
-            bio.setText(Html.fromHtml("Co-founder &amp; designer of <a href=\\\"https://dribbble.com/dribbble\\\">@Dribbble</a>. Principal of SimpleBits. Aspiring clawhammer banjoist."));
+        bio.setText(Html.fromHtml("Co-founder &amp; designer of <a href=\\\"https://dribbble.com/dribbble\\\">@Dribbble</a>. Principal of SimpleBits. Aspiring clawhammer banjoist."));
     }
 
     @Override
