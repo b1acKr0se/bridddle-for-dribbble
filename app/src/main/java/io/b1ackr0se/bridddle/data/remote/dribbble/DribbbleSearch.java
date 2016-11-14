@@ -14,7 +14,7 @@ import rx.Observable;
 
 public interface DribbbleSearch {
 
-    String END_POINT = "https://dribbble.com/";
+    String ENDPOINT = "https://dribbble.com/";
     String SORT_POPULAR = "";
     String SORT_RECENT = "latest";
 

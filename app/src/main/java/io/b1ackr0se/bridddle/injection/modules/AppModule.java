@@ -9,10 +9,10 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import io.b1ackr0se.bridddle.BuildConfig;
 import io.b1ackr0se.bridddle.data.remote.dribbble.AuthInterceptor;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleApi;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleAuthenticator;
+import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleSearch;
 import io.b1ackr0se.bridddle.util.SharedPref;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -31,6 +31,17 @@ public class AppModule {
 
     @Provides
     @Singleton
+    OkHttpClient providesHttpClient() {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        return new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .addInterceptor(new AuthInterceptor(providesSharedPreferences().getAccessToken()))
+                .build();
+    }
+
+    @Provides
+    @Singleton
     Application providesApplication() {
         return application;
     }
@@ -44,15 +55,9 @@ public class AppModule {
     @Provides
     @Singleton
     DribbbleApi providesClient() {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        final OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
-                .addInterceptor(new AuthInterceptor(providesSharedPreferences().getAccessToken()))
-                .build();
         return new Retrofit.Builder()
                 .baseUrl(DribbbleApi.ENDPOINT)
-                .client(client)
+                .client(providesHttpClient())
                 .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build()
@@ -68,5 +73,17 @@ public class AppModule {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build()
                 .create((DribbbleAuthenticator.class));
+    }
+
+    @Provides
+    @Singleton
+    DribbbleSearch providesSearch() {
+        return new Retrofit.Builder()
+                .baseUrl(DribbbleSearch.ENDPOINT)
+                .client(providesHttpClient())
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build()
+                .create((DribbbleSearch.class));
     }
 }
