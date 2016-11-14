@@ -28,8 +28,8 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         subscription = new CompositeSubscription();
     }
 
-    void getAuthUser() {
-        if (authUser != null) subscription.add(Observable.just(authUser).subscribe(user -> getView().showProfile(user)));
+    void getAuthUser(boolean forceReload) {
+        if (authUser != null && !forceReload) subscription.add(Observable.just(authUser).subscribe(user -> getView().showProfile(user)));
 
         else {
             subscription.add(
@@ -45,7 +45,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
 
                                 @Override
                                 public void onError(Throwable e) {
-
+                                    getView().showProgress(false);
                                 }
 
                                 @Override
@@ -74,11 +74,12 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
 
                             @Override
                             public void onError(Throwable e) {
-
+                                getView().showProgress(false);
                             }
 
                             @Override
                             public void onNext(List<Shot> list) {
+                                getView().showProgress(false);
                                 getView().showLikedShots(list);
                             }
                         })

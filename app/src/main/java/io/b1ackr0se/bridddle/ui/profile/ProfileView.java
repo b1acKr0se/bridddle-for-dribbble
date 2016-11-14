@@ -12,4 +12,6 @@ public interface ProfileView extends BaseView {
 
     void showLikedShots(List<Shot> list);
 
+    void showProgress(boolean show);
+
 }

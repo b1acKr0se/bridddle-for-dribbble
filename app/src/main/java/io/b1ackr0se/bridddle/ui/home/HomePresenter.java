@@ -30,7 +30,11 @@ public class HomePresenter extends BasePresenter<HomeView> {
         subscription.unsubscribe();
     }
 
-    void loadShots() {
+    void loadShots(boolean firstPage) {
+        if (firstPage) {
+            currentPage = 1;
+            getView().showProgress(true);
+        }
         subscription = dribbbleApi.getPopular(currentPage, PER_PAGE)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Shot>>() {
@@ -42,9 +46,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        if(currentPage == 1) {
-                            getView().showError();
-                        }
+                        getView().showError();
                     }
 
                     @Override

@@ -112,6 +112,7 @@ public class MainActivity extends BaseActivity implements ProgressCallback, OnTa
 
     private void changeTab(int position) {
         ObjectAnimator alphaAnimation = ObjectAnimator.ofFloat(viewPager, View.ALPHA, 0, 1);
+        alphaAnimation.setDuration(200);
         alphaAnimation.start();
         viewPager.setCurrentItem(position, false);
         if (isToolbarShowing)
