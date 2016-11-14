@@ -131,6 +131,7 @@ public class HomeFragment extends Fragment implements HomeView, OnShotClick, Swi
     @Override
     public void onRefresh() {
         TransitionManager.beginDelayedTransition(recyclerView);
+        noInternetIndicator.setVisibility(View.GONE);
         shots.clear();
         adapter.notifyDataSetChanged();
         presenter.loadShots(true);
