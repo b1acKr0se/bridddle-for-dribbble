@@ -5,13 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
@@ -20,19 +17,15 @@ import com.roughike.bottombar.OnTabSelectListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.b1ackr0se.bridddle.base.BaseActivity;
-import io.b1ackr0se.bridddle.ui.ProgressCallback;
 import io.b1ackr0se.bridddle.ui.common.PagerAdapter;
-import io.b1ackr0se.bridddle.ui.home.HomeFragment;
 import io.b1ackr0se.bridddle.ui.login.DribbbleLoginActivity;
-import io.b1ackr0se.bridddle.ui.search.SearchFragment;
 import io.b1ackr0se.bridddle.ui.widget.AppBarStateListener;
 import io.b1ackr0se.bridddle.ui.widget.SlideDisabledViewPager;
 
-public class MainActivity extends BaseActivity implements ProgressCallback, OnTabSelectListener {
+public class MainActivity extends BaseActivity implements OnTabSelectListener {
     public static final int REQUEST_CODE_LOGIN = 1;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.app_bar_layout) AppBarLayout appBarLayout;
-    @BindView(R.id.progress_bar) ProgressBar progressBar;
     @BindView(R.id.view_pager) SlideDisabledViewPager viewPager;
     @BindView(R.id.bottom_bar) BottomBar bottomBar;
 
@@ -85,11 +78,6 @@ public class MainActivity extends BaseActivity implements ProgressCallback, OnTa
                 Toast.makeText(this, "cancelled!", Toast.LENGTH_LONG).show();
             }
         }
-    }
-
-    @Override
-    public void showProgress(boolean show) {
-        progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override

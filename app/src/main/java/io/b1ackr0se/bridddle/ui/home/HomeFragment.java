@@ -1,7 +1,6 @@
 package io.b1ackr0se.bridddle.ui.home;
 
 
-import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
@@ -22,12 +21,10 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.b1ackr0se.bridddle.MainActivity;
 import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.ui.EndlessRecyclerOnScrollListener;
-import io.b1ackr0se.bridddle.ui.ProgressCallback;
 
 public class HomeFragment extends Fragment implements HomeView, OnShotClick, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
@@ -39,7 +36,6 @@ public class HomeFragment extends Fragment implements HomeView, OnShotClick, Swi
 
     private HomeAdapter adapter;
     private List<Shot> shots = new ArrayList<>();
-    private ProgressCallback progressCallback;
     private EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
 
     private final GridLayoutManager.SpanSizeLookup onSpanSizeLookup = new GridLayoutManager.SpanSizeLookup() {
@@ -58,8 +54,6 @@ public class HomeFragment extends Fragment implements HomeView, OnShotClick, Swi
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
         ((BaseActivity) getActivity()).getActivityComponent().inject(this);
-
-        progressCallback = (MainActivity) getActivity();
 
         recyclerView.setClipToPadding(false);
         recyclerView.setPadding(0, 0, 0, getResources().getDimensionPixelSize(R.dimen.navigation_bar_height));
