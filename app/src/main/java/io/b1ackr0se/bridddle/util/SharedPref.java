@@ -17,6 +17,10 @@ public class SharedPref {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString("access_token", code).apply();
     }
 
+    public boolean isLoggedIn() {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString("access_token", null) != null;
+    }
+
     public String getAccessToken() {
         String accessToken = PreferenceManager.getDefaultSharedPreferences(context).getString("access_token", null);
         return accessToken == null ? BuildConfig.DRIBBBLE_ACCESS_TOKEN : accessToken;

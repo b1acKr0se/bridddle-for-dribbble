@@ -39,8 +39,13 @@ public class DribbbleLoginActivity extends BaseActivity implements View.OnClickL
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
         presenter.attachView(this);
+
         login.setOnClickListener(this);
         root.setOnClickListener(this);
+
+        if (getIntent().getBooleanExtra("command_login", false)) {
+            doLogin();
+        }
     }
 
     @Override

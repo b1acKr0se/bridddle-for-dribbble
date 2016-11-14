@@ -9,6 +9,7 @@ import io.b1ackr0se.bridddle.data.model.LikedShot;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.model.User;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleApi;
+import io.b1ackr0se.bridddle.util.SharedPref;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -21,15 +22,18 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
     private CompositeSubscription subscription;
     private User authUser;
     private DribbbleApi api;
+    private SharedPref sharedPref;
 
     @Inject
-    public ProfilePresenter(DribbbleApi api) {
+    public ProfilePresenter(DribbbleApi api, SharedPref sharedPref) {
         this.api = api;
+        this.sharedPref = sharedPref;
         subscription = new CompositeSubscription();
     }
 
     void getAuthUser(boolean forceReload) {
-        if (authUser != null && !forceReload) subscription.add(Observable.just(authUser).subscribe(user -> getView().showProfile(user)));
+        if (authUser != null && !forceReload)
+            subscription.add(Observable.just(authUser).subscribe(user -> getView().showProfile(user)));
 
         else {
             subscription.add(
@@ -84,6 +88,13 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
                             }
                         })
         );
+    }
+
+    public void checkLoginStatus() {
+        boolean isLoggedIn = sharedPref.isLoggedIn();
+        getView().onLoginStatus(isLoggedIn);
+        if (isLoggedIn) getAuthUser(true);
+        else getView().showProgress(false);
     }
 
     @Override
