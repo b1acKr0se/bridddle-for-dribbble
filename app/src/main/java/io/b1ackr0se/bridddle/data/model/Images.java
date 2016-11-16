@@ -21,6 +21,12 @@ public class Images implements Parcelable {
     @Expose
     private String teaser;
 
+    public Images(String hidpi, String normal, String teaser) {
+        this.hidpi = hidpi;
+        this.normal = normal;
+        this.teaser = teaser;
+    }
+
     /**
      *
      * @return

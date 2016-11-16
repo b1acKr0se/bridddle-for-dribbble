@@ -67,7 +67,7 @@ public class HomeFragment extends Fragment implements HomeView, OnShotClick, Swi
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), android.R.color.white));
 
-        adapter = new ShotAdapter(getContext(), shots);
+        adapter = new ShotAdapter(getContext(), shots, false);
         adapter.setOnShotClick(this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         gridLayoutManager.setSpanSizeLookup(onSpanSizeLookup);

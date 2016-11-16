@@ -29,9 +29,9 @@ public class ShotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private TypedArray placeHolderColor;
     private OnShotClick onShotClick;
 
-    public ShotAdapter(Context context, List<Shot> list) {
+    public ShotAdapter(Context context, List<Shot> list, boolean isSearch) {
         this.shots = list;
-        placeHolderColor = context.getResources().obtainTypedArray(R.array.placeholder);
+        placeHolderColor = context.getResources().obtainTypedArray(isSearch ? R.array.placeholder_light : R.array.placeholder);
     }
 
     @Override

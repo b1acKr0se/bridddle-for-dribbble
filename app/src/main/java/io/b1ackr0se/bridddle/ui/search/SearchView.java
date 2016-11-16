@@ -14,6 +14,6 @@ public interface SearchView extends BaseView {
 
     void showError();
 
-    void showResult(List<Shot> resuls);
+    void showResult(List<Shot> resuls, boolean newQuery);
 
 }

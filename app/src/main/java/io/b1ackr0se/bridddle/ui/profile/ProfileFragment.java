@@ -100,7 +100,7 @@ public class ProfileFragment extends Fragment implements ProfileView, SwipeRefre
 
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        homeAdapter = new ShotAdapter(getContext(), shots);
+        homeAdapter = new ShotAdapter(getContext(), shots, false);
         recyclerView.setAdapter(homeAdapter);
 
         return view;

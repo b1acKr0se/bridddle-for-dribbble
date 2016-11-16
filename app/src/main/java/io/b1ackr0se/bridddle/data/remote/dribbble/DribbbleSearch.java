@@ -8,6 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 import io.b1ackr0se.bridddle.data.model.Shot;
+import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -19,10 +20,10 @@ public interface DribbbleSearch {
     String SORT_RECENT = "latest";
 
     @GET("search")
-    Observable<List<Shot>> search(@Query("q") String query,
-                                  @Query("page") Integer page,
-                                  @Query("per_page") Integer pageSize,
-                                  @Query("s") @SortingOrder String sort);
+    Observable<ResponseBody> search(@Query("q") String query,
+                                    @Query("page") Integer page,
+                                    @Query("per_page") Integer pageSize,
+                                    @Query("s") @SortingOrder String sort);
 
     @Retention(RetentionPolicy.SOURCE)
     @StringDef({

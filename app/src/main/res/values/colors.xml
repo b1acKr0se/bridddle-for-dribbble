@@ -17,4 +17,10 @@
         <item>#333333</item>
         <item>#1e1e1e</item>
     </array>
+
+    <array name="placeholder_light">
+        <item>#e0e0e0</item>
+        <item>#eeeeee</item>
+        <item>#f5f5f5</item>
+    </array>
 </resources>

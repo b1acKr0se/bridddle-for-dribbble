@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 
@@ -22,10 +23,13 @@ import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleSearch;
+import io.b1ackr0se.bridddle.ui.EndlessRecyclerOnScrollListener;
 import io.b1ackr0se.bridddle.ui.common.ShotAdapter;
 import io.b1ackr0se.bridddle.ui.widget.ResettableEditText;
+import io.b1ackr0se.bridddle.util.SoftKey;
 import rx.Observable;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 
 public class SearchActivity extends BaseActivity implements SearchView {
 
@@ -33,11 +37,22 @@ public class SearchActivity extends BaseActivity implements SearchView {
     @BindView(R.id.toolbar_shadow) View shadow;
     @BindView(R.id.search_edit_text) ResettableEditText editText;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
 
     @Inject SearchPresenter searchPresenter;
 
     private Subscription subscription;
     private ShotAdapter shotAdapter;
+
+    private EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
+
+    private final GridLayoutManager.SpanSizeLookup onSpanSizeLookup = new GridLayoutManager.SpanSizeLookup() {
+        @Override
+        public int getSpanSize(int position) {
+            return shotAdapter.getItemViewType(position) == ShotAdapter.TYPE_ITEM ? 1 : 2;
+        }
+    };
+
     private List<Shot> shots = new ArrayList<>();
 
     @Override
@@ -59,15 +74,37 @@ public class SearchActivity extends BaseActivity implements SearchView {
             shadow.setVisibility(View.GONE);
         }
 
-        shotAdapter = new ShotAdapter(this, shots);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        gridLayoutManager.setSpanSizeLookup(onSpanSizeLookup);
+
+        endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore() {
+                shots.add(null);
+                shotAdapter.notifyItemInserted(shots.size() - 1);
+                searchPresenter.search(DribbbleSearch.SORT_POPULAR, true);
+            }
+        };
+
+        shotAdapter = new ShotAdapter(this, shots, true);
+
+        recyclerView.setClipToPadding(false);
+        if (SoftKey.isAvailable(this)) {
+            recyclerView.setPadding(0, 0, 0, getResources().getDimensionPixelSize(R.dimen.navigation_bar_height));
+        }
+        recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(shotAdapter);
+        recyclerView.addOnScrollListener(endlessRecyclerOnScrollListener);
 
         subscription = RxTextView.textChanges(editText)
                 .debounce(1, TimeUnit.SECONDS)
                 .switchMap(Observable::just)
                 .filter(charSequence -> charSequence != null && charSequence.length() >= 2)
-                .subscribe(charSequence -> searchPresenter.search(charSequence.toString(), DribbbleSearch.SORT_POPULAR, false));
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(charSequence -> {
+                    searchPresenter.setQuery(charSequence.toString());
+                    searchPresenter.search(DribbbleSearch.SORT_POPULAR, false);
+                });
     }
 
     @Override
@@ -85,7 +122,8 @@ public class SearchActivity extends BaseActivity implements SearchView {
 
     @Override
     public void showProgress(boolean show) {
-
+        recyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -95,12 +133,20 @@ public class SearchActivity extends BaseActivity implements SearchView {
 
     @Override
     public void showError() {
+        showProgress(false);
 
     }
 
     @Override
-    public void showResult(List<Shot> resuls) {
-        shots.clear();
+    public void showResult(List<Shot> resuls, boolean newQuery) {
+        recyclerView.setVisibility(View.VISIBLE);
+        if (newQuery) {
+            shots.clear();
+        } else {
+            if (!shots.isEmpty())
+                shots.remove(shots.size() - 1);
+        }
+        endlessRecyclerOnScrollListener.setLoaded();
         shots.addAll(resuls);
         shotAdapter.notifyDataSetChanged();
     }
