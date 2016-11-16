@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 
@@ -38,6 +40,7 @@ public class SearchActivity extends BaseActivity implements SearchView {
     @BindView(R.id.search_edit_text) ResettableEditText editText;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.progress_bar) ProgressBar progressBar;
+    @BindView(R.id.indication) TextView empty;
 
     @Inject SearchPresenter searchPresenter;
 
@@ -123,18 +126,20 @@ public class SearchActivity extends BaseActivity implements SearchView {
     @Override
     public void showProgress(boolean show) {
         recyclerView.setVisibility(View.GONE);
+        empty.setVisibility(View.GONE);
         progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override
     public void showEmpty() {
-
+        showProgress(false);
+        empty.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showError() {
         showProgress(false);
-
+        Toast.makeText(this, "Cannot retrieve search results", Toast.LENGTH_SHORT).show();
     }
 
     @Override

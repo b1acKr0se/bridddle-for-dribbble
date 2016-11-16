@@ -64,7 +64,8 @@ public class SearchPresenter extends BasePresenter<SearchView> {
                     public void onNext(List<Shot> list) {
                         page++;
                         getView().showProgress(false);
-                        getView().showResult(list, !continuousRequest);
+                        if (list.isEmpty()) getView().showEmpty();
+                        else getView().showResult(list, !continuousRequest);
                     }
                 });
     }

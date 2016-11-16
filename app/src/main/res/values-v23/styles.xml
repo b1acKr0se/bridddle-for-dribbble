@@ -6,11 +6,7 @@
         <item name="colorPrimaryDark">@color/gray300</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowLightStatusBar">true</item>
-
-    </style>
-
-    <style name="statusBarStyle" parent="@android:style/Theme.DeviceDefault.Light">
-        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
 </resources>
