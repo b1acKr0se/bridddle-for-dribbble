@@ -11,19 +11,17 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,10 +32,11 @@ import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.ui.widget.AspectRatioImageView;
 import io.b1ackr0se.bridddle.util.DateUtils;
 import io.b1ackr0se.bridddle.util.LinkUtils;
+import io.b1ackr0se.bridddle.util.SoftKey;
 
 
 public class ShotActivity extends BaseActivity {
-
+    @BindView(R.id.nested_scroll_view) NestedScrollView nestedScrollView;
     @BindView(R.id.imageview_shot) AspectRatioImageView shotImageView;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbarLayout;
@@ -50,6 +49,8 @@ public class ShotActivity extends BaseActivity {
     @BindView(R.id.like_count) TextView likeCount;
     @BindView(R.id.view_count) TextView viewCount;
     @BindView(R.id.response_count) TextView responseCount;
+
+    private Shot shot;
 
     @OnClick(R.id.like)
     public void onLike() {
@@ -70,12 +71,8 @@ public class ShotActivity extends BaseActivity {
         Intent intent = new Intent(context, ShotActivity.class);
         intent.putExtra("shot", shot);
         ImageView coverStartView = (ImageView) view.findViewById(R.id.shot_image);
-        if(coverStartView.getDrawable() == null) {
-            context.startActivity(intent);
-            return;
-        }
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(context, coverStartView, "image");
-        ActivityCompat.startActivity(context, intent, options.toBundle());
+        context.startActivity(intent);
+        context.overridePendingTransition(R.anim.slide_up, R.anim.iddle);
     }
 
 
@@ -88,16 +85,23 @@ public class ShotActivity extends BaseActivity {
 
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         collapsingToolbarLayout.setCollapsedTitleTextColor(Color.TRANSPARENT);
         collapsingToolbarLayout.setExpandedTitleColor(Color.TRANSPARENT);
 
-        Shot shot = getIntent().getParcelableExtra("shot");
+        nestedScrollView.setClipToPadding(false);
+        if (SoftKey.isAvailable(this)) {
+            nestedScrollView.setPadding(0, 0, 0, getResources().getDimensionPixelSize(R.dimen.navigation_bar_height));
+        }
+
+        shot = getIntent().getParcelableExtra("shot");
 
         Glide.with(this)
                 .load(shot.getImages().getHighestResImage())
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .priority(Priority.IMMEDIATE)
                 .into(shotImageView);
-
 
         shotTitle.setText(shot.getTitle());
 
@@ -123,7 +127,18 @@ public class ShotActivity extends BaseActivity {
         viewCount.setText(String.valueOf(shot.getViewsCount()) + " VIEWS");
         responseCount.setText(String.valueOf(shot.getCommentsCount()) + " RESPONSES");
         shotDate.setText(DateUtils.parse(shot.getCreatedAt()));
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home)
+            onBackPressed();
+        return super.onOptionsItemSelected(item);
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(0, R.anim.slide_down);
     }
 }

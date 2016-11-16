@@ -77,8 +77,22 @@ public class ShotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             Glide.with(holder.shotImageView.getContext())
                     .load(shot.getImages().getNormal())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(holder.shotImageView);
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(new GlideDrawableImageViewTarget(holder.shotImageView) {
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
+                            super.onResourceReady(resource, animation);
+                            resource.stop();
+                        }
+
+                        @Override
+                        public void onStart() {
+                        }
+
+                        @Override
+                        public void onStop() {
+                        }
+                    });
         }
     }
 
