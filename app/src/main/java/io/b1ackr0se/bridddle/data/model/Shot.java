@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
@@ -50,7 +51,7 @@ public class Shot implements Parcelable {
     private Integer bucketsCount;
     @SerializedName("created_at")
     @Expose
-    private String createdAt;
+    private Date createdAt;
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
@@ -309,7 +310,7 @@ public class Shot implements Parcelable {
      * @return
      * The createdAt
      */
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
@@ -318,7 +319,7 @@ public class Shot implements Parcelable {
      * @param createdAt
      * The created_at
      */
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -557,7 +558,7 @@ public class Shot implements Parcelable {
         dest.writeValue(this.attachmentsCount);
         dest.writeValue(this.reboundsCount);
         dest.writeValue(this.bucketsCount);
-        dest.writeString(this.createdAt);
+        dest.writeLong(createdAt != null ? createdAt.getTime() : -1L);
         dest.writeString(this.updatedAt);
         dest.writeString(this.htmlUrl);
         dest.writeString(this.attachmentsUrl);
@@ -588,7 +589,8 @@ public class Shot implements Parcelable {
         this.attachmentsCount = (Integer) in.readValue(Integer.class.getClassLoader());
         this.reboundsCount = (Integer) in.readValue(Integer.class.getClassLoader());
         this.bucketsCount = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.createdAt = in.readString();
+        long tmpCreatedAt = in.readLong();
+        this.createdAt = tmpCreatedAt != -1 ? new Date(tmpCreatedAt) : null;
         this.updatedAt = in.readString();
         this.htmlUrl = in.readString();
         this.attachmentsUrl = in.readString();

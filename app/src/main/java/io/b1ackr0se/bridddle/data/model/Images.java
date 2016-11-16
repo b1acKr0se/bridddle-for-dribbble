@@ -27,6 +27,10 @@ public class Images implements Parcelable {
         this.teaser = teaser;
     }
 
+    public String getHighestResImage() {
+        return hidpi == null ? normal : hidpi;
+    }
+
     /**
      *
      * @return

@@ -1,6 +1,7 @@
 package io.b1ackr0se.bridddle.ui.home;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,7 @@ import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.ui.EndlessRecyclerOnScrollListener;
 import io.b1ackr0se.bridddle.ui.common.ShotAdapter;
+import io.b1ackr0se.bridddle.ui.detail.ShotActivity;
 import io.b1ackr0se.bridddle.util.SoftKey;
 
 public class HomeFragment extends Fragment implements HomeView, OnShotClick, SwipeRefreshLayout.OnRefreshListener {
@@ -124,12 +126,12 @@ public class HomeFragment extends Fragment implements HomeView, OnShotClick, Swi
     }
 
     @Override
-    public void onClick(Shot shot) {
-
+    public void onClick(View view, Shot shot) {
+        ShotActivity.navigate(getActivity(), view, shot);
     }
 
     @Override
-    public void onLongClick(Shot shot) {
+    public void onLongClick(View view, Shot shot) {
 
     }
 

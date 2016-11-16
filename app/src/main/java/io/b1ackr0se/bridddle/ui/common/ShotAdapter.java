@@ -64,8 +64,10 @@ public class ShotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ShotViewHolder holder = (ShotViewHolder) viewHolder;
             Shot shot = shots.get(position);
 
+            holder.itemView.setOnClickListener(view -> onShotClick.onClick(view, shot));
+
             holder.itemView.setOnLongClickListener(l -> {
-                onShotClick.onLongClick(shot);
+                onShotClick.onLongClick(l, shot);
                 return true;
             });
 
@@ -75,22 +77,8 @@ public class ShotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             Glide.with(holder.shotImageView.getContext())
                     .load(shot.getImages().getNormal())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(new GlideDrawableImageViewTarget(holder.shotImageView) {
-                        @Override
-                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
-                            super.onResourceReady(resource, animation);
-                            resource.stop();
-                        }
-
-                        @Override
-                        public void onStart() {
-                        }
-
-                        @Override
-                        public void onStop() {
-                        }
-                    });
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(holder.shotImageView);
         }
     }
 

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,11 +59,10 @@ public class DribbbleSearchConverter {
         if (imgUrl.contains("_teaser.")) {
             imgUrl = imgUrl.replace("_teaser.", ".");
         }
-        String created;
+        Date createdAt = null;
         try {
-            created = dateFormat.parse(descriptionBlock.select("em.timestamp").first().text()).toString();
+            createdAt = dateFormat.parse(descriptionBlock.select("em.timestamp").first().text());
         } catch (ParseException e) {
-            created = "";
         }
 
         Shot shot = new Shot();
@@ -72,7 +72,7 @@ public class DribbbleSearchConverter {
         shot.setDescription(description);
         shot.setImages(new Images(null, imgUrl, null));
         shot.setAnimated(element.select("div.gif-indicator").first() != null);
-        shot.setCreatedAt(created);
+        shot.setCreatedAt(createdAt);
         shot.setLikesCount(Integer.parseInt(element.select("li.fav").first().child(0).text()
                 .replaceAll(",", "")));
         shot.setCommentsCount(Integer.parseInt(element.select("li.cmnt").first().child(0).text
