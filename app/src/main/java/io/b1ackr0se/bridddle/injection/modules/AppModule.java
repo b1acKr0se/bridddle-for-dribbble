@@ -3,6 +3,7 @@ package io.b1ackr0se.bridddle.injection.modules;
 
 import android.app.Application;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import javax.inject.Singleton;
@@ -31,34 +32,51 @@ public class AppModule {
 
     @Provides
     @Singleton
-    OkHttpClient providesHttpClient() {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        return new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
-                .addInterceptor(new AuthInterceptor(providesSharedPreferences().getAccessToken()))
-                .build();
-    }
-
-    @Provides
-    @Singleton
-    Application providesApplication() {
+    Application provideApplication() {
         return application;
     }
 
     @Provides
     @Singleton
-    SharedPref providesSharedPreferences() {
+    HttpLoggingInterceptor provideLoggingInterceptor() {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        return interceptor;
+    }
+
+    @Provides
+    AuthInterceptor provideAuthenticationInterceptor(SharedPref sharedPref) {
+        return new AuthInterceptor(sharedPref.getAccessToken());
+    }
+
+    @Provides
+    @Singleton
+    OkHttpClient provideHttpClient(HttpLoggingInterceptor interceptor, AuthInterceptor authInterceptor) {
+        return new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .addInterceptor(authInterceptor)
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    Gson provideGson() {
+        return new GsonBuilder().create();
+    }
+
+    @Provides
+    @Singleton
+    SharedPref provideSharedPreferences(Application application) {
         return new SharedPref(application);
     }
 
     @Provides
     @Singleton
-    DribbbleApi providesClient() {
+    DribbbleApi provideClient(OkHttpClient client, Gson gson) {
         return new Retrofit.Builder()
                 .baseUrl(DribbbleApi.ENDPOINT)
-                .client(providesHttpClient())
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build()
                 .create((DribbbleApi.class));
@@ -66,10 +84,10 @@ public class AppModule {
 
     @Provides
     @Singleton
-    DribbbleAuthenticator providesAuthenticator() {
+    DribbbleAuthenticator provideAuthenticator(Gson gson) {
         return new Retrofit.Builder()
                 .baseUrl(DribbbleAuthenticator.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build()
                 .create((DribbbleAuthenticator.class));
@@ -77,11 +95,11 @@ public class AppModule {
 
     @Provides
     @Singleton
-    DribbbleSearch providesSearch() {
+    DribbbleSearch provideSearch(OkHttpClient client, Gson gson) {
         return new Retrofit.Builder()
                 .baseUrl(DribbbleSearch.ENDPOINT)
-                .client(providesHttpClient())
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build()
                 .create((DribbbleSearch.class));

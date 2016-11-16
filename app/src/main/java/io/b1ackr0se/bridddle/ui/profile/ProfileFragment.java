@@ -37,7 +37,7 @@ import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.model.User;
-import io.b1ackr0se.bridddle.ui.home.HomeAdapter;
+import io.b1ackr0se.bridddle.ui.common.ShotAdapter;
 import io.b1ackr0se.bridddle.ui.login.DribbbleLoginActivity;
 import io.b1ackr0se.bridddle.util.SoftKey;
 
@@ -64,7 +64,7 @@ public class ProfileFragment extends Fragment implements ProfileView, SwipeRefre
 
     @Inject ProfilePresenter presenter;
 
-    private HomeAdapter homeAdapter;
+    private ShotAdapter homeAdapter;
     private List<Shot> shots = new ArrayList<>();
 
     public ProfileFragment() {
@@ -100,7 +100,7 @@ public class ProfileFragment extends Fragment implements ProfileView, SwipeRefre
 
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        homeAdapter = new HomeAdapter(getContext(), shots);
+        homeAdapter = new ShotAdapter(getContext(), shots);
         recyclerView.setAdapter(homeAdapter);
 
         return view;

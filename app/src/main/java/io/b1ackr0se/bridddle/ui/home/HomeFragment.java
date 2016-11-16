@@ -25,6 +25,7 @@ import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.ui.EndlessRecyclerOnScrollListener;
+import io.b1ackr0se.bridddle.ui.common.ShotAdapter;
 import io.b1ackr0se.bridddle.util.SoftKey;
 
 public class HomeFragment extends Fragment implements HomeView, OnShotClick, SwipeRefreshLayout.OnRefreshListener {
@@ -35,14 +36,14 @@ public class HomeFragment extends Fragment implements HomeView, OnShotClick, Swi
 
     @Inject HomePresenter presenter;
 
-    private HomeAdapter adapter;
+    private ShotAdapter adapter;
     private List<Shot> shots = new ArrayList<>();
     private EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
 
     private final GridLayoutManager.SpanSizeLookup onSpanSizeLookup = new GridLayoutManager.SpanSizeLookup() {
         @Override
         public int getSpanSize(int position) {
-            return adapter.getItemViewType(position) == HomeAdapter.TYPE_ITEM ? 1 : 2;
+            return adapter.getItemViewType(position) == ShotAdapter.TYPE_ITEM ? 1 : 2;
         }
     };
 
@@ -66,7 +67,7 @@ public class HomeFragment extends Fragment implements HomeView, OnShotClick, Swi
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), android.R.color.white));
 
-        adapter = new HomeAdapter(getContext(), shots);
+        adapter = new ShotAdapter(getContext(), shots);
         adapter.setOnShotClick(this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         gridLayoutManager.setSpanSizeLookup(onSpanSizeLookup);

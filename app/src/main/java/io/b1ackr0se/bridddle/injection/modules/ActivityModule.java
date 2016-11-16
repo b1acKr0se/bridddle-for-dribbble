@@ -14,7 +14,7 @@ public class ActivityModule {
     }
 
     @Provides
-    Activity providesActivity() {
+    Activity provideActivity() {
         return activity;
     }
 }

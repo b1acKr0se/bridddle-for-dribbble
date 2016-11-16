@@ -18,8 +18,6 @@ import okhttp3.OkHttpClient;
 public interface AppComponent {
     void inject(App application);
 
-    OkHttpClient httpClient();
-
     Application application();
 
     DribbbleApi client();
