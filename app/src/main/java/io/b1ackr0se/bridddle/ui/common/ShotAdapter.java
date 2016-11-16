@@ -1,4 +1,4 @@
-package io.b1ackr0se.bridddle.ui.home;
+package io.b1ackr0se.bridddle.ui.common;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -18,8 +18,10 @@ import java.util.Random;
 
 import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.data.model.Shot;
+import io.b1ackr0se.bridddle.ui.home.OnShotClick;
+import io.b1ackr0se.bridddle.ui.home.ProgressViewHolder;
 
-public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ShotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int TYPE_PROGRESS = 0;
     public static final int TYPE_ITEM = 1;
 
@@ -27,9 +29,9 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private TypedArray placeHolderColor;
     private OnShotClick onShotClick;
 
-    public HomeAdapter(Context context, List<Shot> list) {
+    public ShotAdapter(Context context, List<Shot> list, boolean isSearch) {
         this.shots = list;
-        placeHolderColor = context.getResources().obtainTypedArray(R.array.placeholder);
+        placeHolderColor = context.getResources().obtainTypedArray(isSearch ? R.array.placeholder_light : R.array.placeholder);
     }
 
     @Override
@@ -40,7 +42,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return new Random().nextLong();
     }
 
-    void setOnShotClick(OnShotClick onShotClick) {
+    public void setOnShotClick(OnShotClick onShotClick) {
         this.onShotClick = onShotClick;
     }
 

@@ -7,9 +7,20 @@
     <color name="transparent">#55000000</color>
     <color name="login_transparent">#e5000000</color>
 
+    <color name="gray50">#FAFAFA</color>
+    <color name="gray100">#F5F5F5</color>
+    <color name="gray300">#E0E0E0</color>
+    <color name="gray600">#808080</color>
+
     <array name="placeholder">
         <item>#232323</item>
         <item>#333333</item>
         <item>#1e1e1e</item>
+    </array>
+
+    <array name="placeholder_light">
+        <item>#e0e0e0</item>
+        <item>#eeeeee</item>
+        <item>#f5f5f5</item>
     </array>
 </resources>

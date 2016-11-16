@@ -19,6 +19,7 @@ import butterknife.ButterKnife;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.ui.common.PagerAdapter;
 import io.b1ackr0se.bridddle.ui.login.DribbbleLoginActivity;
+import io.b1ackr0se.bridddle.ui.search.SearchActivity;
 import io.b1ackr0se.bridddle.ui.widget.AppBarStateListener;
 import io.b1ackr0se.bridddle.ui.widget.SlideDisabledViewPager;
 
@@ -29,7 +30,6 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     @BindView(R.id.view_pager) SlideDisabledViewPager viewPager;
     @BindView(R.id.bottom_bar) BottomBar bottomBar;
 
-    private PagerAdapter adapter;
     private boolean isToolbarShowing = true;
 
     @Override
@@ -47,9 +47,10 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
             }
         });
 
-        adapter = new PagerAdapter(getSupportFragmentManager());
+        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
         viewPager.setOffscreenPageLimit(4);
         viewPager.setAdapter(adapter);
+        bottomBar.getTabAtPosition(1).setOnClickListener(view -> search());
         bottomBar.setOnTabSelectListener(this);
     }
 
@@ -75,7 +76,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(this, "Logged in!", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "cancelled!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Cancelled!", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -86,16 +87,18 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
             case R.id.dashboad:
                 changeTab(0);
                 break;
-            case R.id.search:
+            case R.id.favorite:
                 changeTab(1);
                 break;
-            case R.id.favorite:
+            case R.id.profile:
                 changeTab(2);
                 break;
-            case R.id.profile:
-                changeTab(3);
-                break;
         }
+    }
+
+    private void search() {
+        startActivity(new Intent(this, SearchActivity.class));
+        overridePendingTransition(R.anim.slide_up, R.anim.iddle);
     }
 
     private void changeTab(int position) {

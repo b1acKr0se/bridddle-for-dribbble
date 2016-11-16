@@ -1,13 +1,9 @@
 package io.b1ackr0se.bridddle.ui.home;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.b1ackr0se.bridddle.base.BasePresenter;
-import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleApi;
-import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -36,24 +32,14 @@ public class HomePresenter extends BasePresenter<HomeView> {
             getView().showProgress(true);
         }
         subscription = dribbbleApi.getPopular(currentPage, PER_PAGE)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Shot>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        getView().showError();
-                    }
-
-                    @Override
-                    public void onNext(List<Shot> shots) {
-                        getView().showShots(shots);
-                        currentPage++;
-                    }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(shots -> {
+                    getView().showShots(shots);
+                    currentPage++;
+                }, throwable -> {
+                    throwable.printStackTrace();
+                    getView().showError();
                 });
     }
 }

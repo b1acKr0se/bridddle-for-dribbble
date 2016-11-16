@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import io.b1ackr0se.bridddle.ui.home.HomeFragment;
 import io.b1ackr0se.bridddle.ui.profile.ProfileFragment;
-import io.b1ackr0se.bridddle.ui.search.SearchFragment;
 
 public class PagerAdapter extends FragmentPagerAdapter {
 
@@ -20,14 +19,14 @@ public class PagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 return new HomeFragment();
-            case 3:
+            case 2:
                 return new ProfileFragment();
         }
-        return new SearchFragment();
+        return new HomeFragment();
     }
 
     @Override
     public int getCount() {
-        return 4;
+        return 3;
     }
 }
