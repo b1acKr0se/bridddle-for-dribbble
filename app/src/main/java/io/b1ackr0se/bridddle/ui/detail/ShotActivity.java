@@ -45,6 +45,7 @@ import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Comment;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleApi;
+import io.b1ackr0se.bridddle.ui.EndlessRecyclerOnScrollListener;
 import io.b1ackr0se.bridddle.ui.detail.comment.CommentAdapter;
 import io.b1ackr0se.bridddle.ui.widget.AspectRatioImageView;
 import io.b1ackr0se.bridddle.ui.widget.ColorPaletteView;
@@ -76,6 +77,8 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
     private Shot shot;
     private List<Comment> comments = new ArrayList<>();
     private CommentAdapter adapter;
+
+    private EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
 
     @OnClick(R.id.like)
     public void onLike() {
@@ -123,10 +126,21 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
             nestedScrollView.setPadding(0, 0, 0, getResources().getDimensionPixelSize(R.dimen.navigation_bar_height));
         }
 
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore() {
+                comments.add(null);
+                adapter.notifyItemInserted(comments.size() - 1);
+                shotPresenter.loadComment(false);
+            }
+        };
+
         adapter = new CommentAdapter(comments);
         recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(endlessRecyclerOnScrollListener);
 
         shot = getIntent().getParcelableExtra("shot");
 
@@ -166,20 +180,25 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
 
     @Override
     public void showComments(List<Comment> list) {
-        TransitionManager.beginDelayedTransition(recyclerView);
-        comments.clear();
+        setLoadMoreFinished();
         comments.addAll(list);
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void showNoComment() {
-
+        setLoadMoreFinished();
     }
 
     @Override
     public void showError() {
+        setLoadMoreFinished();
+    }
 
+    private void setLoadMoreFinished() {
+        if (!comments.isEmpty())
+            comments.remove(comments.size() - 1);
+        endlessRecyclerOnScrollListener.setLoaded();
     }
 
     private void loadShot() {

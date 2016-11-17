@@ -1,7 +1,6 @@
 package io.b1ackr0se.bridddle.ui.home;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
@@ -26,6 +25,7 @@ import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.ui.EndlessRecyclerOnScrollListener;
+import io.b1ackr0se.bridddle.ui.common.OnShotClick;
 import io.b1ackr0se.bridddle.ui.common.ShotAdapter;
 import io.b1ackr0se.bridddle.ui.detail.ShotActivity;
 import io.b1ackr0se.bridddle.util.SoftKey;

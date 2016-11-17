@@ -1,4 +1,4 @@
-package io.b1ackr0se.bridddle.ui.home;
+package io.b1ackr0se.bridddle.ui.common;
 
 
 import android.view.View;

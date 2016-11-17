@@ -28,7 +28,7 @@ import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleSearch;
 import io.b1ackr0se.bridddle.ui.EndlessRecyclerOnScrollListener;
 import io.b1ackr0se.bridddle.ui.common.ShotAdapter;
 import io.b1ackr0se.bridddle.ui.detail.ShotActivity;
-import io.b1ackr0se.bridddle.ui.home.OnShotClick;
+import io.b1ackr0se.bridddle.ui.common.OnShotClick;
 import io.b1ackr0se.bridddle.ui.widget.ResettableEditText;
 import io.b1ackr0se.bridddle.util.SoftKey;
 import rx.Observable;

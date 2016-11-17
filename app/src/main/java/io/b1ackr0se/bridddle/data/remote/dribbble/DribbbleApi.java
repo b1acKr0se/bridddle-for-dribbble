@@ -28,5 +28,5 @@ public interface DribbbleApi {
     Observable<List<LikedShot>> getLikesOfAuthenticatedUser();
 
     @GET("v1/shots/{id}/comments")
-    Observable<List<Comment>> getComments(@Path("id") int id);
+    Observable<List<Comment>> getComments(@Path("id") int id, @Query("page") Integer page, @Query("per_page") Integer pageSize);
 }
