@@ -5,7 +5,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <TextView
+    <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
         android:id="@+id/shot_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,7 +14,6 @@
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
         android:paddingTop="8dp"
-        android:text="Living Room - Final Colors"
         style="@style/Base.TextAppearance.AppCompat.Headline"
         android:textSize="20sp"/>
 
@@ -38,7 +37,7 @@
                 android:tint="@color/gray600"
                 app:srcCompat="@drawable/like"/>
 
-            <TextView
+            <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
                 android:id="@+id/like_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -62,7 +61,7 @@
                 android:tint="@color/gray600"
                 app:srcCompat="@drawable/view"/>
 
-            <TextView
+            <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
                 android:id="@+id/view_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -87,7 +86,7 @@
                 android:tint="@color/gray600"
                 app:srcCompat="@drawable/reply"/>
 
-            <TextView
+            <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
                 android:id="@+id/response_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -114,7 +113,7 @@
                 android:tint="@color/gray600"
                 app:srcCompat="@drawable/share"/>
 
-            <TextView
+            <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -145,35 +144,31 @@
             android:layout_marginStart="60dp"
             android:orientation="vertical">
 
-            <TextView
+            <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
                 android:id="@+id/shot_author_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="8dp"
-                android:text="Chris Guyot"
-                android:textSize="14sp"
-                style="@style/TextAppearance.AppCompat.Title"/>
+                android:textSize="14sp"/>
 
-            <TextView
+            <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
                 android:id="@+id/shot_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="8dp"
-                android:text="Nov 15, 2016"
                 android:textSize="12sp"/>
 
         </LinearLayout>
 
     </FrameLayout>
 
-    <TextView
+    <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
         android:id="@+id/shot_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingBottom="16dp"
-        android:text="Final color version of the living room scene from myself and @Paul McMahon."
         android:textSize="16sp"/>
 
 </LinearLayout>
