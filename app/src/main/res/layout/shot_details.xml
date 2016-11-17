@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:descendantFocusability="blocksDescendants"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:descendantFocusability="blocksDescendants"
               android:orientation="vertical">
 
     <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
@@ -133,44 +133,43 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"/>
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/author_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal">
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        >
 
         <ImageView
             android:id="@+id/shot_author_image"
             android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="16dp"/>
+            android:layout_height="40dp"/>
 
-        <LinearLayout
+
+        <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
+            android:id="@+id/shot_author_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="60dp"
-            android:orientation="vertical">
+            android:layout_toEndOf="@id/shot_author_image"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:textStyle="bold"/>
 
-            <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
-                android:id="@+id/shot_author_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:textStyle="bold"
-                android:textSize="14sp"/>
-
-            <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
-                android:id="@+id/shot_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:textSize="12sp"/>
-
-        </LinearLayout>
-
-    </FrameLayout>
+        <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
+            android:id="@+id/shot_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/shot_author_name"
+            android:layout_toEndOf="@id/shot_author_image"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:textSize="12sp"/>
+    </RelativeLayout>
 
     <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
         android:id="@+id/shot_description"
