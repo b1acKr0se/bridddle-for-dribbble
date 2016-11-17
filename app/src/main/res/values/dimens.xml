@@ -5,4 +5,7 @@
     <dimen name="navigation_bar_height">48dp</dimen>
     <dimen name="profile_recycler_view_padding_top">16dp</dimen>
     <dimen name="clear_button_padding_right">16dp</dimen>
+    <dimen name="color_height">30dp</dimen>
+    <dimen name="color_width">0dp</dimen>
+    <dimen name="color_palette_margin">8dp</dimen>
 </resources>

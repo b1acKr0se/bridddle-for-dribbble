@@ -27,13 +27,15 @@ import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleSearch;
 import io.b1ackr0se.bridddle.ui.EndlessRecyclerOnScrollListener;
 import io.b1ackr0se.bridddle.ui.common.ShotAdapter;
+import io.b1ackr0se.bridddle.ui.detail.ShotActivity;
+import io.b1ackr0se.bridddle.ui.common.OnShotClick;
 import io.b1ackr0se.bridddle.ui.widget.ResettableEditText;
 import io.b1ackr0se.bridddle.util.SoftKey;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
-public class SearchActivity extends BaseActivity implements SearchView {
+public class SearchActivity extends BaseActivity implements SearchView, OnShotClick {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.toolbar_shadow) View shadow;
@@ -90,6 +92,7 @@ public class SearchActivity extends BaseActivity implements SearchView {
         };
 
         shotAdapter = new ShotAdapter(this, shots, true);
+        shotAdapter.setOnShotClick(this);
 
         recyclerView.setClipToPadding(false);
         if (SoftKey.isAvailable(this)) {
@@ -161,5 +164,15 @@ public class SearchActivity extends BaseActivity implements SearchView {
         super.onDestroy();
         searchPresenter.detachView();
         subscription.unsubscribe();
+    }
+
+    @Override
+    public void onClick(View view, Shot shot) {
+        ShotActivity.navigate(this, view, shot);
+    }
+
+    @Override
+    public void onLongClick(View view, Shot shot) {
+
     }
 }

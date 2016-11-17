@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/gray100"
+                android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="8dp"/>
+
+    <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/avatar"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:textStyle="bold"/>
+
+
+    <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_toEndOf="@id/avatar"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:textSize="16sp"/>
+
+    <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/content"
+        android:layout_toEndOf="@id/avatar"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:textSize="12sp"/>
+
+
+</RelativeLayout>

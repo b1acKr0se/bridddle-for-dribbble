@@ -1,4 +1,4 @@
-package io.b1ackr0se.bridddle.ui.home;
+package io.b1ackr0se.bridddle.ui.common;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

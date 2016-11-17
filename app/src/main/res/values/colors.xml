@@ -10,7 +10,7 @@
     <color name="gray50">#FAFAFA</color>
     <color name="gray100">#F5F5F5</color>
     <color name="gray300">#E0E0E0</color>
-    <color name="gray600">#808080</color>
+    <color name="gray600">#757575</color>
 
     <array name="placeholder">
         <item>#232323</item>

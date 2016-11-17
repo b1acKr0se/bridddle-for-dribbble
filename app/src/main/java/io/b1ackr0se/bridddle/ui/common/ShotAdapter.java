@@ -18,8 +18,6 @@ import java.util.Random;
 
 import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.data.model.Shot;
-import io.b1ackr0se.bridddle.ui.home.OnShotClick;
-import io.b1ackr0se.bridddle.ui.home.ProgressViewHolder;
 
 public class ShotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int TYPE_PROGRESS = 0;
@@ -64,8 +62,10 @@ public class ShotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ShotViewHolder holder = (ShotViewHolder) viewHolder;
             Shot shot = shots.get(position);
 
+            holder.itemView.setOnClickListener(view -> onShotClick.onClick(view, shot));
+
             holder.itemView.setOnLongClickListener(l -> {
-                onShotClick.onLongClick(shot);
+                onShotClick.onLongClick(l, shot);
                 return true;
             });
 
