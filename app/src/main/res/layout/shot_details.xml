@@ -124,11 +124,19 @@
 
     </LinearLayout>
 
+    <io.b1ackr0se.bridddle.ui.widget.ColorPaletteView
+        android:id="@+id/color_palette_view"
+        android:layout_width="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_height="25dp"/>
+
     <FrameLayout
         android:id="@+id/author_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal">
 
         <ImageView
