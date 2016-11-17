@@ -3,6 +3,7 @@ package io.b1ackr0se.bridddle.injection.components;
 import dagger.Component;
 import io.b1ackr0se.bridddle.injection.PerActivity;
 import io.b1ackr0se.bridddle.injection.modules.ActivityModule;
+import io.b1ackr0se.bridddle.ui.detail.ShotActivity;
 import io.b1ackr0se.bridddle.ui.home.HomeFragment;
 import io.b1ackr0se.bridddle.ui.login.DribbbleLoginActivity;
 import io.b1ackr0se.bridddle.ui.profile.ProfileFragment;
@@ -18,4 +19,6 @@ public interface ActivityComponent {
     void inject(ProfileFragment fragment);
 
     void inject(SearchActivity activity);
+
+    void inject(ShotActivity activity);
 }

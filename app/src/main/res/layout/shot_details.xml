@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:descendantFocusability="blocksDescendants"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
 
     <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
         android:id="@+id/shot_title"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -14,7 +16,6 @@
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
         android:paddingTop="8dp"
-        style="@style/Base.TextAppearance.AppCompat.Headline"
         android:textSize="20sp"/>
 
     <LinearLayout
@@ -23,10 +24,10 @@
         android:layout_marginTop="24dp">
 
         <LinearLayout
+            android:id="@+id/like"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/like"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:orientation="vertical">
 
@@ -72,10 +73,10 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/response"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/response"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:orientation="vertical">
 
@@ -90,19 +91,19 @@
                 android:id="@+id/response_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:ellipsize="end"
                 android:layout_gravity="center_horizontal"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:paddingTop="4dp"
                 android:text="33 RESPONSES"
                 android:textSize="12sp"/>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/share"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/share"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:orientation="vertical">
 
@@ -127,10 +128,10 @@
     <io.b1ackr0se.bridddle.ui.widget.ColorPaletteView
         android:id="@+id/color_palette_view"
         android:layout_width="match_parent"
-        android:layout_marginStart="16dp"
+        android:layout_height="25dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_height="25dp"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"/>
 
     <FrameLayout
         android:id="@+id/author_detail"
@@ -157,6 +158,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="8dp"
+                android:textStyle="bold"
                 android:textSize="14sp"/>
 
             <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
@@ -174,9 +176,14 @@
         android:id="@+id/shot_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
         android:paddingBottom="16dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
         android:textSize="16sp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

@@ -8,10 +8,13 @@ import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.transition.TransitionManager;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,14 +32,20 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
+import io.b1ackr0se.bridddle.data.model.Comment;
 import io.b1ackr0se.bridddle.data.model.Shot;
+import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleApi;
+import io.b1ackr0se.bridddle.ui.detail.comment.CommentAdapter;
 import io.b1ackr0se.bridddle.ui.widget.AspectRatioImageView;
 import io.b1ackr0se.bridddle.ui.widget.ColorPaletteView;
 import io.b1ackr0se.bridddle.ui.widget.OnColorClickListener;
@@ -45,7 +54,7 @@ import io.b1ackr0se.bridddle.util.LinkUtils;
 import io.b1ackr0se.bridddle.util.SoftKey;
 
 
-public class ShotActivity extends BaseActivity implements OnColorClickListener {
+public class ShotActivity extends BaseActivity implements OnColorClickListener, ShotView {
     @BindView(R.id.nested_scroll_view) NestedScrollView nestedScrollView;
     @BindView(R.id.imageview_shot) AspectRatioImageView shotImageView;
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -60,8 +69,13 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener {
     @BindView(R.id.view_count) TextView viewCount;
     @BindView(R.id.response_count) TextView responseCount;
     @BindView(R.id.color_palette_view) ColorPaletteView colorPaletteView;
+    @BindView(R.id.recycler_view) RecyclerView recyclerView;
+
+    @Inject ShotPresenter shotPresenter;
     
     private Shot shot;
+    private List<Comment> comments = new ArrayList<>();
+    private CommentAdapter adapter;
 
     @OnClick(R.id.like)
     public void onLike() {
@@ -93,6 +107,10 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener {
 
         ButterKnife.bind(this);
 
+        getActivityComponent().inject(this);
+
+        shotPresenter.attachView(this);
+
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -105,13 +123,19 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener {
             nestedScrollView.setPadding(0, 0, 0, getResources().getDimensionPixelSize(R.dimen.navigation_bar_height));
         }
 
+        adapter = new CommentAdapter(comments);
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
         shot = getIntent().getParcelableExtra("shot");
 
-        bind();
+        shotPresenter.load(shot);
     }
 
-    private void bind() {
 
+    @Override
+    public void bind() {
         loadShot();
 
         shotTitle.setText(shot.getTitle());
@@ -136,7 +160,26 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener {
         likeCount.setText(String.valueOf(shot.getLikesCount()) + " LIKES");
         viewCount.setText(String.valueOf(shot.getViewsCount()) + " VIEWS");
         responseCount.setText(String.valueOf(shot.getCommentsCount()) + " RESPONSES");
+
         shotDate.setText(DateUtils.parse(shot.getCreatedAt()));
+    }
+
+    @Override
+    public void showComments(List<Comment> list) {
+        TransitionManager.beginDelayedTransition(recyclerView);
+        comments.clear();
+        comments.addAll(list);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showNoComment() {
+
+    }
+
+    @Override
+    public void showError() {
+
     }
 
     private void loadShot() {
