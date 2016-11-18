@@ -6,7 +6,7 @@
     android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="-25dp"
+    android:paddingTop="-24dp"
     tools:context="io.b1ackr0se.bridddle.MainActivity">
 
     <io.b1ackr0se.bridddle.ui.widget.SlideDisabledViewPager
@@ -25,7 +25,7 @@
             android:id="@+id/toolbar_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="25dp"
+            android:paddingTop="24dp"
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways">
             <android.support.v7.widget.Toolbar

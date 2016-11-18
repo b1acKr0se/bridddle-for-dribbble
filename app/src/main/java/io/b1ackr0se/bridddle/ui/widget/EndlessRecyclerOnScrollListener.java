@@ -1,4 +1,4 @@
-package io.b1ackr0se.bridddle.ui;
+package io.b1ackr0se.bridddle.ui.widget;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;

@@ -27,13 +27,23 @@
         <item name="colorPrimary">@color/gray100</item>
         <item name="colorPrimaryDark">@color/gray300</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="toolbar">@style/ThemeOverlay.AppCompat.ActionBar</item>
+    </style>
+
+    <style name="AppTheme.Search.NoActionBar.Dark" parent="AppTheme.Search.NoActionBar">
+        <item name="toolbar">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
     <style name="AppTheme.Shot.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/gray100</item>
         <item name="colorPrimaryDark">@color/gray300</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowIsTranslucent">true</item>
