@@ -48,7 +48,7 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
 
         name.setText(comment.getUser().getName());
         content.setText(comment.getBody());
-        LinkUtils.setTextWithLinks(content, LinkUtils.fromHtml(comment.getBody(), false));
+        LinkUtils.setTextWithLinks(content, comment.getBody());
         time.setText(DateUtils.parse(comment.getCreatedAt()));
     }
 }

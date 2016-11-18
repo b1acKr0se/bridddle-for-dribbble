@@ -127,6 +127,7 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
         }
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+
         endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(layoutManager) {
             @Override
             public void onLoadMore() {
@@ -161,7 +162,7 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
 
         shotTitle.setText(shot.getTitle());
 
-        LinkUtils.setTextWithLinks(shotDescription, LinkUtils.fromHtml(shot.getDescription(), false));
+        LinkUtils.setTextWithLinks(shotDescription, shot.getDescription());
 
         shotAuthorName.setText(shot.getUser().getName());
 

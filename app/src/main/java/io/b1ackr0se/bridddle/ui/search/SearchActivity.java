@@ -48,6 +48,7 @@ public class SearchActivity extends BaseActivity implements SearchView, OnShotCl
     @Inject SearchPresenter searchPresenter;
 
     private Subscription subscription;
+
     private ShotAdapter shotAdapter;
 
     private int originalColor, invertedColor;
@@ -137,13 +138,13 @@ public class SearchActivity extends BaseActivity implements SearchView, OnShotCl
             editText.setVisibility(View.GONE);
             hexColor.setVisibility(View.VISIBLE);
 
-
             toolbarContainer.setBackgroundColor(originalColor);
 
             hexColor.setTextColor(invertedColor);
 
             String hex = String.format("%06X", (0xFFFFFF & originalColor));
             hexColor.setText("#" + hex);
+
             searchPresenter.setQuery(hex);
             searchPresenter.search(searchType, DribbbleSearch.SORT_POPULAR, false);
         }
