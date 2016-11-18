@@ -1,6 +1,10 @@
 package io.b1ackr0se.bridddle.ui.search;
 
+import android.support.annotation.IntDef;
+
 import java.io.IOException;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -16,11 +20,14 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class SearchPresenter extends BasePresenter<SearchView> {
+    public static final int SEARCH_QUERY = 0;
+    public static final int SEARCH_COLOR = 1;
 
     private Subscription subscription;
     private DribbbleSearch dribbbleSearch;
     private int page = 1;
     private String query;
+
 
     @Inject
     public SearchPresenter(DribbbleSearch dribbbleSearch) {
@@ -31,7 +38,7 @@ public class SearchPresenter extends BasePresenter<SearchView> {
         this.query = query;
     }
 
-    public void search(@DribbbleSearch.SortingOrder String sortingOrder, boolean continuousRequest) {
+    public void search(int searchType, @DribbbleSearch.SortingOrder String sortingOrder, boolean continuousRequest) {
         if (subscription != null) subscription.unsubscribe();
 
         if (!continuousRequest) {
@@ -39,7 +46,7 @@ public class SearchPresenter extends BasePresenter<SearchView> {
             page = 1;
         }
 
-        subscription = dribbbleSearch.search(query, page, 20, sortingOrder)
+        subscription = (searchType == SEARCH_QUERY ? dribbbleSearch.search(query, page, 20, sortingOrder) : dribbbleSearch.color(query, page, 20, sortingOrder))
                 .subscribeOn(Schedulers.io())
                 .flatMap(responseBody -> {
                     try {
@@ -70,9 +77,11 @@ public class SearchPresenter extends BasePresenter<SearchView> {
                 });
     }
 
+
     @Override
     public void detachView() {
         super.detachView();
         if (subscription != null) subscription.unsubscribe();
     }
+
 }

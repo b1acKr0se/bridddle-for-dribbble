@@ -10,6 +10,7 @@ import java.util.List;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -24,6 +25,14 @@ public interface DribbbleSearch {
                                     @Query("page") Integer page,
                                     @Query("per_page") Integer pageSize,
                                     @Query("s") @SortingOrder String sort);
+
+
+    @GET("colors/{hex}")
+    Observable<ResponseBody> color(@Path("hex") String hexCode,
+                                   @Query("page") Integer page,
+                                   @Query("per_page") Integer pageSize,
+                                   @Query("s") @SortingOrder String sort);
+
 
     @Retention(RetentionPolicy.SOURCE)
     @StringDef({

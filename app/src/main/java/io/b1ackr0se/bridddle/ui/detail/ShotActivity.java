@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.transition.TransitionManager;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.NestedScrollView;
@@ -44,11 +43,12 @@ import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Comment;
 import io.b1ackr0se.bridddle.data.model.Shot;
-import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleApi;
-import io.b1ackr0se.bridddle.ui.EndlessRecyclerOnScrollListener;
 import io.b1ackr0se.bridddle.ui.detail.comment.CommentAdapter;
+import io.b1ackr0se.bridddle.ui.search.SearchActivity;
+import io.b1ackr0se.bridddle.ui.search.SearchPresenter;
 import io.b1ackr0se.bridddle.ui.widget.AspectRatioImageView;
 import io.b1ackr0se.bridddle.ui.widget.ColorPaletteView;
+import io.b1ackr0se.bridddle.ui.widget.EndlessRecyclerOnScrollListener;
 import io.b1ackr0se.bridddle.ui.widget.OnColorClickListener;
 import io.b1ackr0se.bridddle.util.DateUtils;
 import io.b1ackr0se.bridddle.util.LinkUtils;
@@ -137,6 +137,8 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
         };
 
         adapter = new CommentAdapter(comments);
+        recyclerView.setClipToPadding(false);
+
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -147,6 +149,11 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
         shotPresenter.load(shot);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        shotPresenter.detachView();
+    }
 
     @Override
     public void bind() {
@@ -260,6 +267,10 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
 
     @Override
     public void onColorClick(View view, @ColorInt int color) {
-        Toast.makeText(this, String.format("#%06X", (0xFFFFFF & color)), Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, SearchActivity.class);
+        intent.putExtra("search_type", SearchPresenter.SEARCH_COLOR);
+        intent.putExtra("color", color);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_up, R.anim.iddle);
     }
 }

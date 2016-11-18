@@ -1,6 +1,6 @@
 package io.b1ackr0se.bridddle.ui.search;
 
-import android.os.Build;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,10 +25,10 @@ import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleSearch;
-import io.b1ackr0se.bridddle.ui.EndlessRecyclerOnScrollListener;
+import io.b1ackr0se.bridddle.ui.common.OnShotClick;
 import io.b1ackr0se.bridddle.ui.common.ShotAdapter;
 import io.b1ackr0se.bridddle.ui.detail.ShotActivity;
-import io.b1ackr0se.bridddle.ui.common.OnShotClick;
+import io.b1ackr0se.bridddle.ui.widget.EndlessRecyclerOnScrollListener;
 import io.b1ackr0se.bridddle.ui.widget.ResettableEditText;
 import io.b1ackr0se.bridddle.util.SoftKey;
 import rx.Observable;
@@ -38,7 +38,8 @@ import rx.android.schedulers.AndroidSchedulers;
 public class SearchActivity extends BaseActivity implements SearchView, OnShotClick {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.toolbar_shadow) View shadow;
+    @BindView(R.id.toolbar_container) View toolbarContainer;
+    @BindView(R.id.hex_color) TextView hexColor;
     @BindView(R.id.search_edit_text) ResettableEditText editText;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.progress_bar) ProgressBar progressBar;
@@ -48,6 +49,10 @@ public class SearchActivity extends BaseActivity implements SearchView, OnShotCl
 
     private Subscription subscription;
     private ShotAdapter shotAdapter;
+
+    private int originalColor, invertedColor;
+
+    private int searchType;
 
     private EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
 
@@ -64,6 +69,18 @@ public class SearchActivity extends BaseActivity implements SearchView, OnShotCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        searchType = getIntent().getIntExtra("search_type", SearchPresenter.SEARCH_QUERY);
+
+        if (searchType == SearchPresenter.SEARCH_COLOR) {
+            originalColor = getIntent().getIntExtra("color", Color.BLACK);
+            invertedColor = getInvertedColor(originalColor);
+
+            if (invertedColor == Color.BLACK)
+                setTheme(R.style.AppTheme_Search_NoActionBar);
+            else
+                setTheme(R.style.AppTheme_Search_NoActionBar_Dark);
+        }
+
         setContentView(R.layout.activity_search);
 
         ButterKnife.bind(this);
@@ -74,10 +91,9 @@ public class SearchActivity extends BaseActivity implements SearchView, OnShotCl
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            shadow.setVisibility(View.GONE);
-        }
+        setupInterface();
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         gridLayoutManager.setSpanSizeLookup(onSpanSizeLookup);
@@ -87,7 +103,7 @@ public class SearchActivity extends BaseActivity implements SearchView, OnShotCl
             public void onLoadMore() {
                 shots.add(null);
                 shotAdapter.notifyItemInserted(shots.size() - 1);
-                searchPresenter.search(DribbbleSearch.SORT_POPULAR, true);
+                searchPresenter.search(searchType, DribbbleSearch.SORT_POPULAR, true);
             }
         };
 
@@ -102,15 +118,46 @@ public class SearchActivity extends BaseActivity implements SearchView, OnShotCl
         recyclerView.setAdapter(shotAdapter);
         recyclerView.addOnScrollListener(endlessRecyclerOnScrollListener);
 
-        subscription = RxTextView.textChanges(editText)
-                .debounce(1, TimeUnit.SECONDS)
-                .switchMap(Observable::just)
-                .filter(charSequence -> charSequence != null && charSequence.length() >= 2)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(charSequence -> {
-                    searchPresenter.setQuery(charSequence.toString());
-                    searchPresenter.search(DribbbleSearch.SORT_POPULAR, false);
-                });
+    }
+
+    private void setupInterface() {
+        if (searchType == SearchPresenter.SEARCH_QUERY) {
+            editText.setVisibility(View.VISIBLE);
+            hexColor.setVisibility(View.GONE);
+            subscription = RxTextView.textChanges(editText)
+                    .debounce(1, TimeUnit.SECONDS)
+                    .switchMap(Observable::just)
+                    .filter(charSequence -> charSequence != null && charSequence.length() >= 2)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(charSequence -> {
+                        searchPresenter.setQuery(charSequence.toString());
+                        searchPresenter.search(searchType, DribbbleSearch.SORT_POPULAR, false);
+                    });
+        } else {
+            editText.setVisibility(View.GONE);
+            hexColor.setVisibility(View.VISIBLE);
+
+
+            toolbarContainer.setBackgroundColor(originalColor);
+
+            hexColor.setTextColor(invertedColor);
+
+            String hex = String.format("%06X", (0xFFFFFF & originalColor));
+            hexColor.setText("#" + hex);
+            searchPresenter.setQuery(hex);
+            searchPresenter.search(searchType, DribbbleSearch.SORT_POPULAR, false);
+        }
+    }
+
+    private int getInvertedColor(int color) {
+        int r = Color.red(color);
+        int g = Color.green(color);
+        int b = Color.blue(color);
+
+        if (r * 0.299 + g * 0.587 + b * 0.114 > 186) {
+            return Color.BLACK;
+        }
+        return Color.WHITE;
     }
 
     @Override
@@ -163,7 +210,7 @@ public class SearchActivity extends BaseActivity implements SearchView, OnShotCl
     protected void onDestroy() {
         super.onDestroy();
         searchPresenter.detachView();
-        subscription.unsubscribe();
+        if (subscription != null) subscription.unsubscribe();
     }
 
     @Override

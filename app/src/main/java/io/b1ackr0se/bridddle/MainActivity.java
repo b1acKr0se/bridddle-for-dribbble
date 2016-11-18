@@ -20,6 +20,7 @@ import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.ui.common.PagerAdapter;
 import io.b1ackr0se.bridddle.ui.login.DribbbleLoginActivity;
 import io.b1ackr0se.bridddle.ui.search.SearchActivity;
+import io.b1ackr0se.bridddle.ui.search.SearchPresenter;
 import io.b1ackr0se.bridddle.ui.widget.AppBarStateListener;
 import io.b1ackr0se.bridddle.ui.widget.SlideDisabledViewPager;
 
@@ -97,7 +98,9 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     }
 
     private void search() {
-        startActivity(new Intent(this, SearchActivity.class));
+        Intent intent = new Intent(this, SearchActivity.class);
+        intent.putExtra("search_type", SearchPresenter.SEARCH_QUERY);
+        startActivity(intent);
         overridePendingTransition(R.anim.slide_up, R.anim.iddle);
     }
 
