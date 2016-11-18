@@ -18,44 +18,41 @@ public class LinkUtils {
     /**
      * https://github.com/hidroh/materialistic/blob/fbcf46ab05b93762387340a8ed22db82b8fa08c5/app/src/main/java/io/github/hidroh/materialistic/AppUtils.java
      */
-    public static void setTextWithLinks(TextView textView, CharSequence html) {
-        textView.setText(html);
-        textView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int action = event.getAction();
-                if (action == MotionEvent.ACTION_UP ||
-                        action == MotionEvent.ACTION_DOWN) {
-                    int x = (int) event.getX();
-                    int y = (int) event.getY();
+    public static void setTextWithLinks(TextView textView, String text) {
+        textView.setText(fromHtml(text, false));
+        textView.setOnTouchListener((v, event) -> {
+            int action = event.getAction();
+            if (action == MotionEvent.ACTION_UP ||
+                    action == MotionEvent.ACTION_DOWN) {
+                int x = (int) event.getX();
+                int y = (int) event.getY();
 
-                    TextView widget = (TextView) v;
-                    x -= widget.getTotalPaddingLeft();
-                    y -= widget.getTotalPaddingTop();
+                TextView widget = (TextView) v;
+                x -= widget.getTotalPaddingLeft();
+                y -= widget.getTotalPaddingTop();
 
-                    x += widget.getScrollX();
-                    y += widget.getScrollY();
+                x += widget.getScrollX();
+                y += widget.getScrollY();
 
-                    Layout layout = widget.getLayout();
-                    int line = layout.getLineForVertical(y);
-                    int off = layout.getOffsetForHorizontal(line, x);
+                Layout layout = widget.getLayout();
+                int line = layout.getLineForVertical(y);
+                int off = layout.getOffsetForHorizontal(line, x);
 
-                    ClickableSpan[] link = Spannable.Factory.getInstance()
-                            .newSpannable(widget.getText())
-                            .getSpans(off, off, ClickableSpan.class);
-                    if (link.length != 0) {
-                        if (action == MotionEvent.ACTION_UP) {
-                            link[0].onClick(widget);
-                        }
-                        return true;
+                ClickableSpan[] link = Spannable.Factory.getInstance()
+                        .newSpannable(widget.getText())
+                        .getSpans(off, off, ClickableSpan.class);
+                if (link.length != 0) {
+                    if (action == MotionEvent.ACTION_UP) {
+                        link[0].onClick(widget);
                     }
+                    return true;
                 }
-                return false;
             }
+            return false;
         });
     }
 
-    public static CharSequence fromHtml(String htmlText, boolean compact) {
+    private static CharSequence fromHtml(String htmlText, boolean compact) {
         if (TextUtils.isEmpty(htmlText)) {
             return null;
         }
