@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -204,8 +203,10 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
     }
 
     private void setLoadMoreFinished() {
-        if (!comments.isEmpty())
+        if (!comments.isEmpty()) {
             comments.remove(comments.size() - 1);
+            adapter.notifyItemRemoved(comments.size());
+        }
         endlessRecyclerOnScrollListener.setLoaded();
     }
 
