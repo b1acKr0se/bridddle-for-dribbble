@@ -15,4 +15,10 @@ public interface ShotView extends BaseView {
     void showNoComment();
 
     void showError();
+
+    void showLike(boolean liked);
+
+    void showLikeInProgress();
+
+    void failedToLike(boolean like);
 }

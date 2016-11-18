@@ -31,12 +31,29 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:tint="@color/gray600"
-                app:srcCompat="@drawable/like"/>
+           <FrameLayout
+               android:id="@+id/like_container"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal">
+               <android.support.v7.widget.AppCompatImageView
+                   android:id="@+id/like_image"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_gravity="center"
+                   android:visibility="invisible"
+                   android:tint="@color/gray600"
+                   app:srcCompat="@drawable/like"/>
+
+               <android.support.v7.widget.AppCompatImageView
+                   android:id="@+id/liked_image"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_gravity="center"
+                   android:tint="@color/colorAccent"
+                   android:visibility="invisible"
+                   app:srcCompat="@drawable/like"/>
+           </FrameLayout>
 
             <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
                 android:id="@+id/like_count"

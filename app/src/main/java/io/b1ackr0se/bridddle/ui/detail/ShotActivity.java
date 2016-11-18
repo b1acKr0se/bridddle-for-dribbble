@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.transition.TransitionManager;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.NestedScrollView;
@@ -17,8 +18,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -70,6 +73,9 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
     @BindView(R.id.response_count) TextView responseCount;
     @BindView(R.id.color_palette_view) ColorPaletteView colorPaletteView;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
+    @BindView(R.id.like_image) ImageView likeImageView;
+    @BindView(R.id.liked_image) ImageView likedImageView;
+    @BindView(R.id.like_container) FrameLayout likeContainer;
 
     @Inject ShotPresenter shotPresenter;
     
@@ -77,11 +83,16 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
     private List<Comment> comments = new ArrayList<>();
     private CommentAdapter adapter;
 
+    private boolean liked;
+
     private EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
 
     @OnClick(R.id.like)
     public void onLike() {
-
+        if (liked)
+            shotPresenter.unlike();
+        else
+            shotPresenter.like();
     }
 
     @OnClick(R.id.share)
@@ -146,7 +157,11 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
 
         shot = getIntent().getParcelableExtra("shot");
 
-        shotPresenter.load(shot);
+        shotPresenter.setShot(shot);
+
+        shotPresenter.checkLike();
+
+        shotPresenter.load();
     }
 
     @Override
@@ -201,6 +216,25 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
     public void showError() {
         setLoadMoreFinished();
     }
+
+    @Override
+    public void showLike(boolean liked) {
+        this.liked = liked;
+        TransitionManager.beginDelayedTransition(likeContainer);
+        likedImageView.setVisibility(liked ? View.VISIBLE : View.INVISIBLE);
+        likeImageView.setVisibility(liked ? View.INVISIBLE : View.VISIBLE);
+    }
+
+    @Override
+    public void showLikeInProgress() {
+        Toast.makeText(this, "Please wait...", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void failedToLike(boolean like) {
+        Toast.makeText(this, "Failed to " + (like ? "like" : "unlike") + " this shot", Toast.LENGTH_SHORT).show();
+    }
+
 
     private void setLoadMoreFinished() {
         if (!comments.isEmpty()) {
