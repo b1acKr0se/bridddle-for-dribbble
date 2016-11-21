@@ -42,6 +42,10 @@
             android:name=".ui.detail.ShotActivity"
             android:theme="@style/AppTheme.Shot.NoActionBar">
         </activity>
+        <activity
+            android:name=".ui.user.UserActivity"
+            android:theme="@style/AppTheme.Shot.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

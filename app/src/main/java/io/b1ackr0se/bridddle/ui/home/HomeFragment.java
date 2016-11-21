@@ -24,13 +24,13 @@ import butterknife.ButterKnife;
 import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
-import io.b1ackr0se.bridddle.ui.common.OnShotClick;
+import io.b1ackr0se.bridddle.ui.common.OnShotClickListener;
 import io.b1ackr0se.bridddle.ui.common.ShotAdapter;
 import io.b1ackr0se.bridddle.ui.detail.ShotActivity;
 import io.b1ackr0se.bridddle.ui.widget.EndlessRecyclerOnScrollListener;
 import io.b1ackr0se.bridddle.util.SoftKey;
 
-public class HomeFragment extends Fragment implements HomeView, OnShotClick, SwipeRefreshLayout.OnRefreshListener {
+public class HomeFragment extends Fragment implements HomeView, OnShotClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.root) FrameLayout root;
     @BindView(R.id.no_internet) View noInternetIndicator;
@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment implements HomeView, OnShotClick, Swi
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), android.R.color.white));
 
         adapter = new ShotAdapter(getContext(), shots, false);
-        adapter.setOnShotClick(this);
+        adapter.setOnShotClickListener(this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         gridLayoutManager.setSpanSizeLookup(onSpanSizeLookup);
 

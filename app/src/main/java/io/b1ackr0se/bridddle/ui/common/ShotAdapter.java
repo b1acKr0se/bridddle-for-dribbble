@@ -25,11 +25,11 @@ public class ShotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Shot> shots;
     private TypedArray placeHolderColor;
-    private OnShotClick onShotClick;
+    private OnShotClickListener onShotClickListener;
 
-    public ShotAdapter(Context context, List<Shot> list, boolean isSearch) {
+    public ShotAdapter(Context context, List<Shot> list, boolean lightTheme) {
         this.shots = list;
-        placeHolderColor = context.getResources().obtainTypedArray(isSearch ? R.array.placeholder_light : R.array.placeholder);
+        placeHolderColor = context.getResources().obtainTypedArray(lightTheme ? R.array.placeholder_light : R.array.placeholder);
     }
 
     @Override
@@ -40,8 +40,8 @@ public class ShotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return new Random().nextLong();
     }
 
-    public void setOnShotClick(OnShotClick onShotClick) {
-        this.onShotClick = onShotClick;
+    public void setOnShotClickListener(OnShotClickListener onShotClickListener) {
+        this.onShotClickListener = onShotClickListener;
     }
 
     @Override
@@ -62,10 +62,14 @@ public class ShotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ShotViewHolder holder = (ShotViewHolder) viewHolder;
             Shot shot = shots.get(position);
 
-            holder.itemView.setOnClickListener(view -> onShotClick.onClick(view, shot));
+            holder.itemView.setOnClickListener(view -> {
+                if (onShotClickListener != null)
+                    onShotClickListener.onClick(view, shot);
+            });
 
             holder.itemView.setOnLongClickListener(l -> {
-                onShotClick.onLongClick(l, shot);
+                if (onShotClickListener != null)
+                    onShotClickListener.onLongClick(l, shot);
                 return true;
             });
 
