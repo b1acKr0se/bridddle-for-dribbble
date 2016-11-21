@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -46,10 +47,13 @@ import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Comment;
 import io.b1ackr0se.bridddle.data.model.Shot;
+import io.b1ackr0se.bridddle.data.model.User;
+import io.b1ackr0se.bridddle.ui.common.OnUserClickListener;
 import io.b1ackr0se.bridddle.ui.detail.comment.CommentAdapter;
 import io.b1ackr0se.bridddle.ui.login.DribbbleLoginActivity;
 import io.b1ackr0se.bridddle.ui.search.SearchActivity;
 import io.b1ackr0se.bridddle.ui.search.SearchPresenter;
+import io.b1ackr0se.bridddle.ui.user.UserActivity;
 import io.b1ackr0se.bridddle.ui.widget.AspectRatioImageView;
 import io.b1ackr0se.bridddle.ui.widget.ColorPaletteView;
 import io.b1ackr0se.bridddle.ui.widget.EndlessRecyclerOnScrollListener;
@@ -59,7 +63,7 @@ import io.b1ackr0se.bridddle.util.LinkUtils;
 import io.b1ackr0se.bridddle.util.SoftKey;
 
 
-public class ShotActivity extends BaseActivity implements OnColorClickListener, ShotView {
+public class ShotActivity extends BaseActivity implements OnColorClickListener, OnUserClickListener, ShotView {
     @BindView(R.id.nested_scroll_view) NestedScrollView nestedScrollView;
     @BindView(R.id.imageview_shot) AspectRatioImageView shotImageView;
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -80,7 +84,7 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
     @BindView(R.id.like_container) FrameLayout likeContainer;
 
     @Inject ShotPresenter shotPresenter;
-    
+
     private Shot shot;
     private List<Comment> comments = new ArrayList<>();
     private CommentAdapter adapter;
@@ -111,6 +115,12 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
 
     }
 
+    @OnClick(R.id.author_detail)
+    public void viewUser() {
+        UserActivity.navigate(this, shot.getUser());
+    }
+
+
     public static void navigate(Activity context, View view, Shot shot) {
         Intent intent = new Intent(context, ShotActivity.class);
         intent.putExtra("shot", shot);
@@ -139,6 +149,7 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
         collapsingToolbarLayout.setExpandedTitleColor(Color.TRANSPARENT);
 
         nestedScrollView.setClipToPadding(false);
+
         if (SoftKey.isAvailable(this)) {
             nestedScrollView.setPadding(0, 0, 0, getResources().getDimensionPixelSize(R.dimen.navigation_bar_height));
         }
@@ -155,6 +166,8 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
         };
 
         adapter = new CommentAdapter(comments);
+        adapter.setListener(this
+        );
 
         recyclerView.setClipToPadding(false);
         recyclerView.setNestedScrollingEnabled(false);
@@ -277,7 +290,7 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
                             super.onResourceReady(resource, animation);
-                            if(resource instanceof GifDrawable) {
+                            if (resource instanceof GifDrawable) {
                                 generateColorPalette(((GifDrawable) resource).getFirstFrame());
                             } else if (resource instanceof GlideBitmapDrawable) {
                                 generateColorPalette(((GlideBitmapDrawable) resource).getBitmap());
@@ -331,5 +344,10 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
         intent.putExtra("color", color);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_up, R.anim.iddle);
+    }
+
+    @Override
+    public void onUserClick(User user) {
+        UserActivity.navigate(this, user);
     }
 }

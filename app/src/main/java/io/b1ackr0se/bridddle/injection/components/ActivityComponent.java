@@ -8,6 +8,7 @@ import io.b1ackr0se.bridddle.ui.home.HomeFragment;
 import io.b1ackr0se.bridddle.ui.login.DribbbleLoginActivity;
 import io.b1ackr0se.bridddle.ui.profile.ProfileFragment;
 import io.b1ackr0se.bridddle.ui.search.SearchActivity;
+import io.b1ackr0se.bridddle.ui.user.UserActivity;
 
 @PerActivity
 @Component(dependencies = AppComponent.class, modules = ActivityModule.class)
@@ -21,4 +22,6 @@ public interface ActivityComponent {
     void inject(SearchActivity activity);
 
     void inject(ShotActivity activity);
+
+    void inject(UserActivity activity);
 }

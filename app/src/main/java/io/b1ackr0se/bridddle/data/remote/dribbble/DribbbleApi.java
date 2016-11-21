@@ -29,10 +29,10 @@ public interface DribbbleApi {
     @GET("v1/user/likes")
     Observable<List<LikedShot>> getLikesOfAuthenticatedUser();
 
-    @GET("v1/user/{id}")
+    @GET("v1/users/{id}")
     Observable<User> getUser(@Path("id") int id);
 
-    @GET("v1/user/{id}/shots")
+    @GET("v1/users/{id}/shots")
     Observable<List<Shot>> getUserShots(@Path("id") int id);
 
     @GET("v1/shots/{id}/comments")
