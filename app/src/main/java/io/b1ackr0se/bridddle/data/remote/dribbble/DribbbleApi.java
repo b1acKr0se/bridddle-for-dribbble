@@ -33,7 +33,7 @@ public interface DribbbleApi {
     Observable<User> getUser(@Path("id") int id);
 
     @GET("v1/users/{id}/shots")
-    Observable<List<Shot>> getUserShots(@Path("id") int id);
+    Observable<List<Shot>> getUserShots(@Path("id") int id,  @Query("page") Integer page, @Query("per_page") Integer pageSize);
 
     @GET("v1/shots/{id}/comments")
     Observable<List<Comment>> getComments(@Path("id") int id, @Query("page") Integer page, @Query("per_page") Integer pageSize);

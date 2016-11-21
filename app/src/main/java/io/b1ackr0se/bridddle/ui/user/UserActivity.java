@@ -23,6 +23,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
@@ -44,14 +45,18 @@ public class UserActivity extends BaseActivity implements UserView {
     @BindView(R.id.follower_count) TextView followerCount;
     @BindView(R.id.bio) TextView bio;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
+    @BindView(R.id.recycler_view_container) View container;
 
     @Inject UserPresenter presenter;
+
+    @OnClick(R.id.more_latest_shot)
+    public void showMoreShots() {
+
+    }
 
     private User user;
     private List<Shot> shots = new ArrayList<>();
     private ShotAdapter shotAdapter;
-
-    private EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
 
     public static void navigate(Context context, User user) {
         Intent intent = new Intent(context, UserActivity.class);
@@ -71,29 +76,17 @@ public class UserActivity extends BaseActivity implements UserView {
         presenter.attachView(this);
 
         if (SoftKey.isAvailable(this)) {
-            recyclerView.setPadding(0, getResources().getDimensionPixelSize(R.dimen.profile_recycler_view_padding_top), 0, getResources().getDimensionPixelSize(R.dimen.navigation_bar_height));
-        } else {
-            recyclerView.setPadding(0, getResources().getDimensionPixelSize(R.dimen.profile_recycler_view_padding_top), 0, 0);
+            recyclerView.setPadding(0, 0, 0, getResources().getDimensionPixelSize(R.dimen.navigation_bar_height));
         }
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
-
-        endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(layoutManager) {
-            @Override
-            public void onLoadMore() {
-                shots.add(null);
-                shotAdapter.notifyItemInserted(shots.size() - 1);
-                presenter.loadShots(false);
-            }
-        };
 
         shotAdapter = new ShotAdapter(this, shots, true);
 
         recyclerView.setClipToPadding(false);
         recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(shotAdapter);
-        recyclerView.addOnScrollListener(endlessRecyclerOnScrollListener);
 
         user = getIntent().getParcelableExtra("user");
 
@@ -142,21 +135,17 @@ public class UserActivity extends BaseActivity implements UserView {
     @Override
     public void showShots(List<Shot> list) {
         empty.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
-
-        if (!shots.isEmpty()) {
-            shots.remove(shots.size() - 1);
-            shotAdapter.notifyItemRemoved(shots.size() - 1);
-        }
-
+        container.setVisibility(View.VISIBLE);
         shots.addAll(list);
         shotAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void showEmptyShot() {
-        recyclerView.setVisibility(View.GONE);
-        empty.setVisibility(View.VISIBLE);
+        if(shots.isEmpty()) {
+            container.setVisibility(View.GONE);
+            empty.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
