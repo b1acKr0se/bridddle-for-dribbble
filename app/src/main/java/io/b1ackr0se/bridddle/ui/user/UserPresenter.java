@@ -1,5 +1,7 @@
 package io.b1ackr0se.bridddle.ui.user;
 
+import android.util.Log;
+
 import javax.inject.Inject;
 
 import io.b1ackr0se.bridddle.base.BasePresenter;
@@ -11,7 +13,7 @@ import rx.subscriptions.CompositeSubscription;
 
 
 public class UserPresenter extends BasePresenter<UserView> {
-
+    private static final int PER_PAGE = 10;
     private CompositeSubscription compositeSubscription;
     private DribbbleApi dribbbleApi;
     private SharedPref sharedPref;
@@ -34,7 +36,7 @@ public class UserPresenter extends BasePresenter<UserView> {
             page = 1;
         }
         compositeSubscription.add(
-                dribbbleApi.getUserShots(userId)
+                dribbbleApi.getUserShots(userId, page, PER_PAGE)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread()).subscribe(
                         shots -> {
