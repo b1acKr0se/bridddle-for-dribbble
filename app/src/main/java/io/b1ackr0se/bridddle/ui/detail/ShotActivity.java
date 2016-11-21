@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.transition.TransitionManager;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.NestedScrollView;
@@ -17,8 +18,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -38,11 +41,13 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.b1ackr0se.bridddle.MainActivity;
 import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Comment;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.ui.detail.comment.CommentAdapter;
+import io.b1ackr0se.bridddle.ui.login.DribbbleLoginActivity;
 import io.b1ackr0se.bridddle.ui.search.SearchActivity;
 import io.b1ackr0se.bridddle.ui.search.SearchPresenter;
 import io.b1ackr0se.bridddle.ui.widget.AspectRatioImageView;
@@ -70,6 +75,9 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
     @BindView(R.id.response_count) TextView responseCount;
     @BindView(R.id.color_palette_view) ColorPaletteView colorPaletteView;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
+    @BindView(R.id.like_image) ImageView likeImageView;
+    @BindView(R.id.liked_image) ImageView likedImageView;
+    @BindView(R.id.like_container) FrameLayout likeContainer;
 
     @Inject ShotPresenter shotPresenter;
     
@@ -77,11 +85,16 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
     private List<Comment> comments = new ArrayList<>();
     private CommentAdapter adapter;
 
+    private boolean liked;
+
     private EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
 
     @OnClick(R.id.like)
     public void onLike() {
-
+        if (liked)
+            shotPresenter.unlike();
+        else
+            shotPresenter.like();
     }
 
     @OnClick(R.id.share)
@@ -146,13 +159,28 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
 
         shot = getIntent().getParcelableExtra("shot");
 
-        shotPresenter.load(shot);
+        shotPresenter.setShot(shot);
+
+        shotPresenter.checkLike();
+
+        shotPresenter.load();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         shotPresenter.detachView();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == MainActivity.REQUEST_CODE_LOGIN) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
+                shotPresenter.checkLike();
+            }
+        }
     }
 
     @Override
@@ -201,6 +229,30 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
     public void showError() {
         setLoadMoreFinished();
     }
+
+    @Override
+    public void showLike(boolean liked) {
+        this.liked = liked;
+        TransitionManager.beginDelayedTransition(likeContainer);
+        likedImageView.setVisibility(liked ? View.VISIBLE : View.INVISIBLE);
+        likeImageView.setVisibility(liked ? View.INVISIBLE : View.VISIBLE);
+    }
+
+    @Override
+    public void showLikeInProgress() {
+        Toast.makeText(this, "Please wait...", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void failedToLike(boolean like) {
+        Toast.makeText(this, "Failed to " + (like ? "like" : "unlike") + " this shot", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void performLogin() {
+        startActivityForResult(new Intent(this, DribbbleLoginActivity.class), MainActivity.REQUEST_CODE_LOGIN);
+    }
+
 
     private void setLoadMoreFinished() {
         if (!comments.isEmpty()) {
