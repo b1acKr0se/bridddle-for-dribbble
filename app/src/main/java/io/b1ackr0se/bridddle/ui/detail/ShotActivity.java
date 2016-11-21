@@ -41,11 +41,13 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.b1ackr0se.bridddle.MainActivity;
 import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Comment;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.ui.detail.comment.CommentAdapter;
+import io.b1ackr0se.bridddle.ui.login.DribbbleLoginActivity;
 import io.b1ackr0se.bridddle.ui.search.SearchActivity;
 import io.b1ackr0se.bridddle.ui.search.SearchPresenter;
 import io.b1ackr0se.bridddle.ui.widget.AspectRatioImageView;
@@ -171,6 +173,17 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == MainActivity.REQUEST_CODE_LOGIN) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
+                shotPresenter.checkLike();
+            }
+        }
+    }
+
+    @Override
     public void bind() {
         loadShot();
 
@@ -233,6 +246,11 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
     @Override
     public void failedToLike(boolean like) {
         Toast.makeText(this, "Failed to " + (like ? "like" : "unlike") + " this shot", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void performLogin() {
+        startActivityForResult(new Intent(this, DribbbleLoginActivity.class), MainActivity.REQUEST_CODE_LOGIN);
     }
 
 

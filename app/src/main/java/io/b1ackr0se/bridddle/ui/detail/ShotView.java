@@ -21,4 +21,6 @@ public interface ShotView extends BaseView {
     void showLikeInProgress();
 
     void failedToLike(boolean like);
+
+    void performLogin();
 }

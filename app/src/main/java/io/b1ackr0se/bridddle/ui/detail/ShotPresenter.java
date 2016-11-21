@@ -17,6 +17,7 @@ public class ShotPresenter extends BasePresenter<ShotView> {
     private int page = 1;
     private Shot shot;
     private CompositeSubscription compositeSubscription;
+    private Subscription likeSubscription, unlikeSubscription;
     private DribbbleApi dribbbleApi;
     private SharedPref sharedPref;
 
@@ -84,37 +85,40 @@ public class ShotPresenter extends BasePresenter<ShotView> {
     void like() {
         if (!sharedPref.isLoggedIn()) {
             getView().showLike(false);
+            getView().performLogin();
             return;
         }
 
         if (shot == null) return;
 
-        Subscription subscription = dribbbleApi.like(shot.getId())
+        if (unlikeSubscription != null) compositeSubscription.remove(unlikeSubscription);
+
+        likeSubscription = dribbbleApi.like(shot.getId())
                 .subscribeOn(Schedulers.io())
-                .doOnNext(like -> checkLike())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(() -> getView().showLikeInProgress())
-                .subscribe(result -> {}, throwable -> getView().failedToLike(false));
-        compositeSubscription.add(subscription);
+                .doOnSubscribe(() -> getView().showLike(true))
+                .subscribe();
+        compositeSubscription.add(likeSubscription);
 
     }
 
     void unlike() {
-
         if (!sharedPref.isLoggedIn()) {
             getView().showLike(false);
+            getView().performLogin();
             return;
         }
 
         if (shot == null) return;
 
-        Subscription subscription = dribbbleApi.unlike(shot.getId())
+        if (likeSubscription != null) compositeSubscription.remove(likeSubscription);
+
+        unlikeSubscription = dribbbleApi.unlike(shot.getId())
                 .subscribeOn(Schedulers.io())
-                .doOnNext(like -> checkLike())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(() -> getView().showLikeInProgress())
-                .subscribe(result -> {}, throwable -> getView().failedToLike(false));
-        compositeSubscription.add(subscription);
+                .doOnSubscribe(() -> getView().showLike(false))
+                .subscribe();
+        compositeSubscription.add(unlikeSubscription);
     }
 
     @Override
