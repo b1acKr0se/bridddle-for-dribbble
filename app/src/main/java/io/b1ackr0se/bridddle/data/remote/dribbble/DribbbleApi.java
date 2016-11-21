@@ -29,6 +29,12 @@ public interface DribbbleApi {
     @GET("v1/user/likes")
     Observable<List<LikedShot>> getLikesOfAuthenticatedUser();
 
+    @GET("v1/user/{id}")
+    Observable<User> getUser(@Path("id") int id);
+
+    @GET("v1/user/{id}/shots")
+    Observable<List<Shot>> getUserShots(@Path("id") int id);
+
     @GET("v1/shots/{id}/comments")
     Observable<List<Comment>> getComments(@Path("id") int id, @Query("page") Integer page, @Query("per_page") Integer pageSize);
 
