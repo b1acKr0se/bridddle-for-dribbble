@@ -99,7 +99,11 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
 
     @OnClick(R.id.share)
     public void onShare() {
-
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, shot.getHtmlUrl());
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, "Share this shot to"));
     }
 
     @OnClick(R.id.response)
@@ -118,6 +122,7 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_shot);
 
         ButterKnife.bind(this);
@@ -150,8 +155,8 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
         };
 
         adapter = new CommentAdapter(comments);
-        recyclerView.setClipToPadding(false);
 
+        recyclerView.setClipToPadding(false);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
