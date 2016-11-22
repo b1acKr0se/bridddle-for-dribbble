@@ -1,7 +1,5 @@
 package io.b1ackr0se.bridddle.ui.user;
 
-import android.util.Log;
-
 import javax.inject.Inject;
 
 import io.b1ackr0se.bridddle.base.BasePresenter;

@@ -28,12 +28,14 @@ import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.model.User;
+import io.b1ackr0se.bridddle.ui.common.OnShotClickListener;
 import io.b1ackr0se.bridddle.ui.common.ShotAdapter;
+import io.b1ackr0se.bridddle.ui.detail.ShotActivity;
 import io.b1ackr0se.bridddle.ui.widget.EndlessRecyclerOnScrollListener;
 import io.b1ackr0se.bridddle.util.LinkUtils;
 import io.b1ackr0se.bridddle.util.SoftKey;
 
-public class UserActivity extends BaseActivity implements UserView {
+public class UserActivity extends BaseActivity implements UserView, OnShotClickListener {
     @BindView(R.id.nested_scroll_view) NestedScrollView nestedScrollView;
     @BindView(R.id.profile_view) View profileView;
     @BindView(R.id.empty_shot) TextView empty;
@@ -82,6 +84,7 @@ public class UserActivity extends BaseActivity implements UserView {
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
 
         shotAdapter = new ShotAdapter(this, shots, true);
+        shotAdapter.setOnShotClickListener(this);
 
         recyclerView.setClipToPadding(false);
         recyclerView.setNestedScrollingEnabled(false);
@@ -150,6 +153,17 @@ public class UserActivity extends BaseActivity implements UserView {
 
     @Override
     public void showError() {
+
+    }
+
+    @Override
+    public void onClick(View view, Shot shot) {
+        shot.setUser(user);
+        ShotActivity.navigate(this, view, shot);
+    }
+
+    @Override
+    public void onLongClick(View view, Shot shot) {
 
     }
 }
