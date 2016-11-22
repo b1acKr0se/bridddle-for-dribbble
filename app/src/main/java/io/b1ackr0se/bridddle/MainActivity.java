@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -71,15 +70,8 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_LOGIN) {
-            if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Logged in!", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Cancelled!", Toast.LENGTH_LONG).show();
-            }
-        }
+    protected void onLoggedIn() {
+
     }
 
     @Override

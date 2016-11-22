@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.b1ackr0se.bridddle.MainActivity;
 import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
@@ -34,6 +35,7 @@ import io.b1ackr0se.bridddle.data.model.User;
 import io.b1ackr0se.bridddle.ui.common.OnShotClickListener;
 import io.b1ackr0se.bridddle.ui.common.ShotAdapter;
 import io.b1ackr0se.bridddle.ui.detail.ShotActivity;
+import io.b1ackr0se.bridddle.ui.login.DribbbleLoginActivity;
 import io.b1ackr0se.bridddle.util.LinkUtils;
 import io.b1ackr0se.bridddle.util.SoftKey;
 
@@ -167,7 +169,7 @@ public class UserActivity extends BaseActivity implements UserView, OnShotClickL
 
     @Override
     public void showEmptyShot() {
-        if(shots.isEmpty()) {
+        if (shots.isEmpty()) {
             container.setVisibility(View.GONE);
             empty.setVisibility(View.VISIBLE);
         }
@@ -187,7 +189,7 @@ public class UserActivity extends BaseActivity implements UserView, OnShotClickL
 
     @Override
     public void performLogin() {
-
+        startActivityForResult(new Intent(this, DribbbleLoginActivity.class), MainActivity.REQUEST_CODE_LOGIN);
     }
 
     @Override
@@ -198,6 +200,11 @@ public class UserActivity extends BaseActivity implements UserView, OnShotClickL
 
     @Override
     public void onLongClick(View view, Shot shot) {
+
+    }
+
+    @Override
+    protected void onLoggedIn() {
 
     }
 }

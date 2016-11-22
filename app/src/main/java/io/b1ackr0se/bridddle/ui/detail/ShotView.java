@@ -18,8 +18,6 @@ public interface ShotView extends BaseView {
 
     void showLike(boolean liked);
 
-    void showLikeInProgress();
-
     void failedToLike(boolean like);
 
     void performLogin();

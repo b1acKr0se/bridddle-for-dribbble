@@ -95,4 +95,9 @@ public class DribbbleLoginActivity extends BaseActivity implements View.OnClickL
     public void onError() {
         dismiss();
     }
+
+    @Override
+    protected void onLoggedIn() {
+
+    }
 }

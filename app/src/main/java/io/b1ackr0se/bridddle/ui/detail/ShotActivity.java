@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -191,14 +190,8 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == MainActivity.REQUEST_CODE_LOGIN) {
-            if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
-                shotPresenter.checkLike();
-            }
-        }
+    protected void onLoggedIn() {
+        shotPresenter.checkLike();
     }
 
     @Override
@@ -254,11 +247,6 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
         TransitionManager.beginDelayedTransition(likeContainer);
         likedImageView.setVisibility(liked ? View.VISIBLE : View.INVISIBLE);
         likeImageView.setVisibility(liked ? View.INVISIBLE : View.VISIBLE);
-    }
-
-    @Override
-    public void showLikeInProgress() {
-        Toast.makeText(this, "Please wait...", Toast.LENGTH_SHORT).show();
     }
 
     @Override

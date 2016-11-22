@@ -223,4 +223,9 @@ public class SearchActivity extends BaseActivity implements SearchView, OnShotCl
     public void onLongClick(View view, Shot shot) {
 
     }
+
+    @Override
+    protected void onLoggedIn() {
+
+    }
 }
