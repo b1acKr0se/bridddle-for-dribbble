@@ -10,5 +10,8 @@ android:
       - android-25
       - extra-android-m2repository
       
+notifications:
+  email: false
+      
 jdk:
   - oraclejdk8
