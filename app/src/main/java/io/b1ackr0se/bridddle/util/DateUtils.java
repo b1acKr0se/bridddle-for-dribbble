@@ -12,11 +12,10 @@ public class DateUtils {
     public static final String DIFFERENT_MORE_HOURS = "%d hours ago";
     public static final String DIFFERENT_SINGLE_MINUTE = "%d minute ago";
     public static final String DIFFERENT_MORE_MINUTES = "%d minutes ago";
-    public static final String UNDEFINED_TIME = "unknown time";
 
     @SuppressLint("DefaultLocale")
     public static String parse(Date date) {
-        if(date == null) return UNDEFINED_TIME;
+        if(date == null) return null;
         long elapsedMillis = new Date().getTime() - date.getTime();
         int quantity;
         if ((int) (elapsedMillis / TimeUnit.DAYS.toMillis(1)) > 0) {
