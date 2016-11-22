@@ -3,6 +3,7 @@ package io.b1ackr0se.bridddle.ui.widget;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
     private boolean loading = true;
@@ -22,9 +23,8 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
             lastVisibleItem = ((GridLayoutManager) mLayoutManager).findLastVisibleItemPosition();
         else
             lastVisibleItem = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
-        if (!loading
-                && totalItemCount <= (lastVisibleItem + visibleThreshold) && totalItemCount > visibleThreshold) {
-            //End of the items
+        Log.i("onScrolled", "------------>: " + dy);
+        if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold) && totalItemCount > visibleThreshold) {
             onLoadMore();
             loading = true;
         }

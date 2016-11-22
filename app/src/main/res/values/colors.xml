@@ -7,6 +7,8 @@
     <color name="transparent">#55000000</color>
     <color name="login_transparent">#e5000000</color>
 
+    <color name="light_green">#7bbb5e</color>
+
     <color name="gray50">#FAFAFA</color>
     <color name="gray100">#F5F5F5</color>
     <color name="gray300">#E0E0E0</color>

@@ -8,6 +8,7 @@ import java.util.List;
 
 import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.data.model.Comment;
+import io.b1ackr0se.bridddle.ui.common.OnUserClickListener;
 import io.b1ackr0se.bridddle.ui.common.ProgressViewHolder;
 
 public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -15,9 +16,14 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public static final int TYPE_COMMENT = 1;
 
     private List<Comment> comments;
+    private OnUserClickListener listener;
 
     public CommentAdapter(List<Comment> list) {
         this.comments = list;
+    }
+
+    public void setListener(OnUserClickListener onUserClickListener) {
+        this.listener = onUserClickListener;
     }
 
     @Override
@@ -38,6 +44,10 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (holder instanceof CommentViewHolder) {
             Comment comment = comments.get(position);
             ((CommentViewHolder) holder).bind(comment);
+            ((CommentViewHolder) holder).avatar.setOnClickListener(view -> {
+                if (listener != null)
+                    listener.onUserClick(comment.getUser());
+            });
         }
     }
 
