@@ -112,4 +112,9 @@ public class UserPresenter extends BasePresenter<UserView> {
     }
 
 
+    @Override
+    public void detachView() {
+        super.detachView();
+        compositeSubscription.unsubscribe();
+    }
 }

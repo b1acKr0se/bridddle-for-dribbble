@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.transition.TransitionManager;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,7 +34,6 @@ import io.b1ackr0se.bridddle.data.model.User;
 import io.b1ackr0se.bridddle.ui.common.OnShotClickListener;
 import io.b1ackr0se.bridddle.ui.common.ShotAdapter;
 import io.b1ackr0se.bridddle.ui.detail.ShotActivity;
-import io.b1ackr0se.bridddle.ui.widget.EndlessRecyclerOnScrollListener;
 import io.b1ackr0se.bridddle.util.LinkUtils;
 import io.b1ackr0se.bridddle.util.SoftKey;
 
@@ -48,12 +50,25 @@ public class UserActivity extends BaseActivity implements UserView, OnShotClickL
     @BindView(R.id.bio) TextView bio;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.recycler_view_container) View container;
+    @BindView(R.id.button_container) FrameLayout buttonContainer;
+    @BindView(R.id.follow) Button follow;
+    @BindView(R.id.unfollow) Button unfollow;
 
     @Inject UserPresenter presenter;
 
     @OnClick(R.id.more_latest_shot)
     public void showMoreShots() {
 
+    }
+
+    @OnClick(R.id.follow)
+    public void follow() {
+        presenter.follow();
+    }
+
+    @OnClick(R.id.unfollow)
+    public void unfollow() {
+        presenter.unfollow();
     }
 
     private User user;
@@ -97,6 +112,13 @@ public class UserActivity extends BaseActivity implements UserView, OnShotClickL
 
         presenter.setUserId(user.getId());
         presenter.loadShots(true);
+        presenter.checkFollow();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.detachView();
     }
 
     private void bindUser() {
@@ -153,6 +175,18 @@ public class UserActivity extends BaseActivity implements UserView, OnShotClickL
 
     @Override
     public void showError() {
+
+    }
+
+    @Override
+    public void showFollowing(boolean following) {
+        TransitionManager.beginDelayedTransition(buttonContainer);
+        follow.setVisibility(following ? View.INVISIBLE : View.VISIBLE);
+        unfollow.setVisibility(following ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    @Override
+    public void performLogin() {
 
     }
 

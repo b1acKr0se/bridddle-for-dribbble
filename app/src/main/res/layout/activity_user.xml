@@ -46,16 +46,37 @@
             android:textSize="14sp"
             />
 
-        <Button
-            android:id="@+id/follow"
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:id="@+id/button_container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="8dp"
-            android:background="@color/colorAccent"
-            android:minHeight="32dp"
-            android:text="FOLLOW"
-            android:textColor="@android:color/white"/>
+            android:layout_margin="8dp">
+
+            <Button
+                android:id="@+id/follow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:minHeight="32dp"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                android:text="FOLLOW"
+                android:textColor="@android:color/white"/>
+
+            <Button
+                android:id="@+id/unfollow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/light_green"
+                android:layout_gravity="center"
+                android:minHeight="32dp"
+                android:visibility="invisible"
+                android:text="FOLLOWING"
+                android:textColor="@android:color/white"/>
+
+        </FrameLayout>
+
 
         <io.b1ackr0se.bridddle.ui.widget.CustomFontTextView
             android:id="@+id/bio"
