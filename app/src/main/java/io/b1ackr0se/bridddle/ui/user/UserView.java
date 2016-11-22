@@ -14,5 +14,7 @@ public interface UserView extends BaseView {
 
     void showError();
 
+    void showFollowing(boolean following);
 
+    void performLogin();
 }
