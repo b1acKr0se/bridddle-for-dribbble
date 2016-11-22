@@ -221,7 +221,12 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
         viewCount.setText(String.valueOf(shot.getViewsCount()) + " VIEWS");
         responseCount.setText(String.valueOf(shot.getCommentsCount()) + " RESPONSES");
 
-        shotDate.setText(DateUtils.parse(shot.getCreatedAt()));
+        if (shot.getCreatedAt() != null) {
+            shotDate.setText(DateUtils.parse(shot.getCreatedAt()));
+            shotDate.setVisibility(View.VISIBLE);
+        } else {
+            shotDate.setVisibility(View.GONE);
+        }
     }
 
     @Override
