@@ -110,11 +110,17 @@ public class UserActivity extends BaseActivity implements UserView, OnShotClickL
 
         user = getIntent().getParcelableExtra("user");
 
-        bindUser();
-
         presenter.setUserId(user.getId());
-        presenter.loadShots(true);
+
+        if (user.getShotsCount() == null) {
+            presenter.loadUser();
+        } else {
+            bindUser();
+        }
+
         presenter.checkFollow();
+        presenter.loadShots(true);
+
     }
 
     @Override
@@ -146,9 +152,9 @@ public class UserActivity extends BaseActivity implements UserView, OnShotClickL
             location.setVisibility(View.VISIBLE);
         }
 
-        shotCount.setText(String.valueOf(user.getShotsCount()));
-        followerCount.setText(String.valueOf(user.getFollowersCount()));
-        likesCount.setText(String.valueOf(user.getLikesReceivedCount()));
+        shotCount.setText((user.getShotsCount() == null) ? "" : String.valueOf(user.getShotsCount()));
+        followerCount.setText((user.getFollowersCount() == null) ? "" : String.valueOf(user.getFollowersCount()));
+        likesCount.setText((user.getLikesCount() == null) ? "" : String.valueOf(user.getLikesCount()));
 
         if (user.getBio() == null) {
             bio.setVisibility(View.GONE);
@@ -190,6 +196,12 @@ public class UserActivity extends BaseActivity implements UserView, OnShotClickL
     @Override
     public void performLogin() {
         startActivityForResult(new Intent(this, DribbbleLoginActivity.class), MainActivity.REQUEST_CODE_LOGIN);
+    }
+
+    @Override
+    public void bindUser(User user) {
+        this.user = user;
+        bindUser();
     }
 
     @Override
