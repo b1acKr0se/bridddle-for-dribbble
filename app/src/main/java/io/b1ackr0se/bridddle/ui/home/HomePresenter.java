@@ -3,7 +3,7 @@ package io.b1ackr0se.bridddle.ui.home;
 import javax.inject.Inject;
 
 import io.b1ackr0se.bridddle.base.BasePresenter;
-import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleApi;
+import io.b1ackr0se.bridddle.data.remote.dribbble.DataManager;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -13,11 +13,11 @@ public class HomePresenter extends BasePresenter<HomeView> {
     private static final int PER_PAGE = 50;
     private int currentPage = 1;
     private Subscription subscription;
-    private DribbbleApi dribbbleApi;
+    private DataManager dataManager;
 
     @Inject
-    public HomePresenter(DribbbleApi api) {
-        dribbbleApi = api;
+    public HomePresenter(DataManager dataManager) {
+        this.dataManager = dataManager;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             currentPage = 1;
             getView().showProgress(true);
         }
-        subscription = dribbbleApi.getPopular(currentPage, PER_PAGE)
+        subscription = dataManager.getPopular(currentPage, PER_PAGE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(shots -> {

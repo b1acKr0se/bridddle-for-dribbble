@@ -10,8 +10,7 @@ import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleApi;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleAuthenticator;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleSearch;
 import io.b1ackr0se.bridddle.injection.modules.AppModule;
-import io.b1ackr0se.bridddle.util.SharedPref;
-import okhttp3.OkHttpClient;
+import io.b1ackr0se.bridddle.util.AuthenticationManager;
 
 @Singleton
 @Component(modules = AppModule.class)
@@ -26,5 +25,5 @@ public interface AppComponent {
 
     DribbbleSearch search();
 
-    SharedPref sharedPref();
+    AuthenticationManager authenticationManager();
 }

@@ -8,8 +8,7 @@ import io.b1ackr0se.bridddle.base.BasePresenter;
 import io.b1ackr0se.bridddle.data.model.LikedShot;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.model.User;
-import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleApi;
-import io.b1ackr0se.bridddle.util.SharedPref;
+import io.b1ackr0se.bridddle.data.remote.dribbble.DataManager;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -18,16 +17,13 @@ import rx.subscriptions.CompositeSubscription;
 
 
 public class ProfilePresenter extends BasePresenter<ProfileView> {
-
     private CompositeSubscription subscription;
     private User authUser;
-    private DribbbleApi api;
-    private SharedPref sharedPref;
+    private DataManager dataManager;
 
     @Inject
-    public ProfilePresenter(DribbbleApi api, SharedPref sharedPref) {
-        this.api = api;
-        this.sharedPref = sharedPref;
+    public ProfilePresenter(DataManager dataManager) {
+        this.dataManager = dataManager;
         subscription = new CompositeSubscription();
     }
 
@@ -37,7 +33,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
 
         else {
             subscription.add(
-                    api.getAuthenticatedUser()
+                    dataManager.getAuthenticatedUser()
                             .subscribeOn(Schedulers.io())
                             .doOnNext(user -> loadLikedShots())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -64,7 +60,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
 
     void loadLikedShots() {
         subscription.add(
-                api.getLikesOfAuthenticatedUser()
+                dataManager.getUserLikes()
                         .subscribeOn(Schedulers.io())
                         .flatMap(Observable::from)
                         .map(LikedShot::getShot)
@@ -91,7 +87,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
     }
 
     public void checkLoginStatus() {
-        boolean isLoggedIn = sharedPref.isLoggedIn();
+        boolean isLoggedIn = dataManager.isLoggedIn();
         getView().onLoginStatus(isLoggedIn);
         if (isLoggedIn) getAuthUser(true);
         else getView().showProgress(false);
