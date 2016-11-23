@@ -6,10 +6,10 @@ import android.preference.PreferenceManager;
 
 import io.b1ackr0se.bridddle.BuildConfig;
 
-public class SharedPref {
+public class AuthenticationManager {
     private Context context;
 
-    public SharedPref(Context context) {
+    public AuthenticationManager(Context context) {
         this.context = context;
     }
 
@@ -23,6 +23,6 @@ public class SharedPref {
 
     public String getAccessToken() {
         String accessToken = PreferenceManager.getDefaultSharedPreferences(context).getString("access_token", null);
-        return accessToken == null ? BuildConfig.DRIBBBLE_ACCESS_TOKEN : accessToken;
+        return "Bearer " + (accessToken == null ? BuildConfig.DRIBBBLE_ACCESS_TOKEN : accessToken);
     }
 }

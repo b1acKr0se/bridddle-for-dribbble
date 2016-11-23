@@ -3,8 +3,7 @@ package io.b1ackr0se.bridddle.ui.user;
 import javax.inject.Inject;
 
 import io.b1ackr0se.bridddle.base.BasePresenter;
-import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleApi;
-import io.b1ackr0se.bridddle.util.SharedPref;
+import io.b1ackr0se.bridddle.data.remote.dribbble.DataManager;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -16,15 +15,13 @@ public class UserPresenter extends BasePresenter<UserView> {
     private CompositeSubscription compositeSubscription;
     private Subscription followSubscription;
     private Subscription unfollowSubscription;
-    private DribbbleApi dribbbleApi;
-    private SharedPref sharedPref;
+    private DataManager dataManager;
     private int userId;
     private int page = 1;
 
     @Inject
-    public UserPresenter(DribbbleApi dribbbleApi, SharedPref sharedPref) {
-        this.dribbbleApi = dribbbleApi;
-        this.sharedPref = sharedPref;
+    public UserPresenter(DataManager dataManager) {
+        this.dataManager = dataManager;
         this.compositeSubscription = new CompositeSubscription();
     }
 
@@ -33,7 +30,7 @@ public class UserPresenter extends BasePresenter<UserView> {
     }
 
     void loadUser() {
-        compositeSubscription.add(dribbbleApi.getUser(userId)
+        compositeSubscription.add(dataManager.getUser(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(user -> getView().bindUser(user)));
@@ -44,7 +41,7 @@ public class UserPresenter extends BasePresenter<UserView> {
             page = 1;
         }
         compositeSubscription.add(
-                dribbbleApi.getUserShots(userId, page, PER_PAGE)
+                dataManager.getUserShots(userId, page, PER_PAGE)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread()).subscribe(
                         shots -> {
@@ -60,14 +57,14 @@ public class UserPresenter extends BasePresenter<UserView> {
     }
 
     void checkFollow() {
-        if (!sharedPref.isLoggedIn()) {
+        if (!dataManager.isLoggedIn()) {
             getView().showFollowing(false);
             return;
         }
 
         if (userId == 0) return;
 
-        Subscription subscription = dribbbleApi.following(userId)
+        Subscription subscription = dataManager.following(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
@@ -79,7 +76,7 @@ public class UserPresenter extends BasePresenter<UserView> {
     }
 
     void follow() {
-        if (!sharedPref.isLoggedIn()) {
+        if (!dataManager.isLoggedIn()) {
             getView().showFollowing(false);
             getView().performLogin();
             return;
@@ -89,7 +86,7 @@ public class UserPresenter extends BasePresenter<UserView> {
 
         if (unfollowSubscription != null) compositeSubscription.remove(unfollowSubscription);
 
-        followSubscription = dribbbleApi.follow(userId)
+        followSubscription = dataManager.follow(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(() -> getView().showFollowing(true))
@@ -99,7 +96,7 @@ public class UserPresenter extends BasePresenter<UserView> {
     }
 
     void unfollow() {
-        if (!sharedPref.isLoggedIn()) {
+        if (!dataManager.isLoggedIn()) {
             getView().showFollowing(false);
             getView().performLogin();
             return;
@@ -109,7 +106,7 @@ public class UserPresenter extends BasePresenter<UserView> {
 
         if (followSubscription != null) compositeSubscription.remove(followSubscription);
 
-        unfollowSubscription = dribbbleApi.unfollow(userId)
+        unfollowSubscription = dataManager.unfollow(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(() -> getView().showFollowing(false))

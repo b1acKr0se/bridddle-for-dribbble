@@ -4,8 +4,7 @@ import javax.inject.Inject;
 
 import io.b1ackr0se.bridddle.base.BasePresenter;
 import io.b1ackr0se.bridddle.data.model.Shot;
-import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleApi;
-import io.b1ackr0se.bridddle.util.SharedPref;
+import io.b1ackr0se.bridddle.data.remote.dribbble.DataManager;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -18,14 +17,12 @@ public class ShotPresenter extends BasePresenter<ShotView> {
     private Shot shot;
     private CompositeSubscription compositeSubscription;
     private Subscription likeSubscription, unlikeSubscription;
-    private DribbbleApi dribbbleApi;
-    private SharedPref sharedPref;
+    private DataManager dataManager;
 
     @Inject
-    public ShotPresenter(DribbbleApi api, SharedPref sharedPref) {
-        compositeSubscription = new CompositeSubscription();
-        this.sharedPref = sharedPref;
-        dribbbleApi = api;
+    public ShotPresenter(DataManager dataManager) {
+        this.compositeSubscription = new CompositeSubscription();
+        this.dataManager = dataManager;
     }
 
     void setShot(Shot shot) {
@@ -45,7 +42,7 @@ public class ShotPresenter extends BasePresenter<ShotView> {
             page = 1;
         }
 
-        Subscription subscription = dribbbleApi.getComments(shot.getId(), page, PER_PAGE)
+        Subscription subscription = dataManager.getComments(shot.getId(), page, PER_PAGE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(comments -> {
@@ -64,14 +61,15 @@ public class ShotPresenter extends BasePresenter<ShotView> {
     }
 
     void checkLike() {
-        if (!sharedPref.isLoggedIn()) {
+        if (!dataManager.isLoggedIn()) {
             getView().showLike(false);
             return;
         }
 
         if (shot == null) return;
 
-        Subscription subscription = dribbbleApi.liked(shot.getId())
+
+        Subscription subscription = dataManager.liked(shot.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(like -> {
@@ -83,7 +81,7 @@ public class ShotPresenter extends BasePresenter<ShotView> {
     }
 
     void like() {
-        if (!sharedPref.isLoggedIn()) {
+        if (!dataManager.isLoggedIn()) {
             getView().showLike(false);
             getView().performLogin();
             return;
@@ -93,7 +91,7 @@ public class ShotPresenter extends BasePresenter<ShotView> {
 
         if (unlikeSubscription != null) compositeSubscription.remove(unlikeSubscription);
 
-        likeSubscription = dribbbleApi.like(shot.getId())
+        likeSubscription = dataManager.like(shot.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(() -> getView().showLike(true))
@@ -103,7 +101,7 @@ public class ShotPresenter extends BasePresenter<ShotView> {
     }
 
     void unlike() {
-        if (!sharedPref.isLoggedIn()) {
+        if (!dataManager.isLoggedIn()) {
             getView().showLike(false);
             getView().performLogin();
             return;
@@ -113,7 +111,7 @@ public class ShotPresenter extends BasePresenter<ShotView> {
 
         if (likeSubscription != null) compositeSubscription.remove(likeSubscription);
 
-        unlikeSubscription = dribbbleApi.unlike(shot.getId())
+        unlikeSubscription = dataManager.unlike(shot.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(() -> getView().showLike(false))

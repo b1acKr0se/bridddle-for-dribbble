@@ -10,11 +10,10 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import io.b1ackr0se.bridddle.data.remote.dribbble.AuthInterceptor;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleApi;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleAuthenticator;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleSearch;
-import io.b1ackr0se.bridddle.util.SharedPref;
+import io.b1ackr0se.bridddle.util.AuthenticationManager;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -45,16 +44,10 @@ public class AppModule {
     }
 
     @Provides
-    AuthInterceptor provideAuthenticationInterceptor(SharedPref sharedPref) {
-        return new AuthInterceptor(sharedPref.getAccessToken());
-    }
-
-    @Provides
     @Singleton
-    OkHttpClient provideHttpClient(HttpLoggingInterceptor interceptor, AuthInterceptor authInterceptor) {
+    OkHttpClient provideHttpClient(HttpLoggingInterceptor interceptor) {
         return new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
-                .addInterceptor(authInterceptor)
                 .build();
     }
 
@@ -66,8 +59,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    SharedPref provideSharedPreferences(Application application) {
-        return new SharedPref(application);
+    AuthenticationManager provideAuthenticationManager(Application application) {
+        return new AuthenticationManager(application);
     }
 
     @Provides
