@@ -5,6 +5,7 @@ import java.util.List;
 
 import io.b1ackr0se.bridddle.base.BaseView;
 import io.b1ackr0se.bridddle.data.model.Shot;
+import io.b1ackr0se.bridddle.data.model.User;
 
 public interface UserView extends BaseView {
 
@@ -17,4 +18,6 @@ public interface UserView extends BaseView {
     void showFollowing(boolean following);
 
     void performLogin();
+
+    void bindUser(User user);
 }

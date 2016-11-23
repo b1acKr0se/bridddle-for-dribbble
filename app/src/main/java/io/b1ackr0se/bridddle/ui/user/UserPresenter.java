@@ -32,6 +32,13 @@ public class UserPresenter extends BasePresenter<UserView> {
         this.userId = userId;
     }
 
+    void loadUser() {
+        compositeSubscription.add(dribbbleApi.getUser(userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(user -> getView().bindUser(user)));
+    }
+
     void loadShots(boolean firstPage) {
         if (firstPage) {
             page = 1;
