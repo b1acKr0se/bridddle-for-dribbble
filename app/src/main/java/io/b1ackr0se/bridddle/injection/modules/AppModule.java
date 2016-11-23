@@ -59,7 +59,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    AuthenticationManager provideSharedPreferences(Application application) {
+    AuthenticationManager provideAuthenticationManager(Application application) {
         return new AuthenticationManager(application);
     }
 
