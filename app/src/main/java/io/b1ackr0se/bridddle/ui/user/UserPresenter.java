@@ -90,7 +90,7 @@ public class UserPresenter extends BasePresenter<UserView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(() -> getView().showFollowing(true))
-                .subscribe();
+                .subscribe(aVoid -> {}, Throwable::printStackTrace);
         compositeSubscription.add(followSubscription);
 
     }
@@ -110,7 +110,7 @@ public class UserPresenter extends BasePresenter<UserView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(() -> getView().showFollowing(false))
-                .subscribe();
+                .subscribe(aVoid -> {}, Throwable::printStackTrace);
         compositeSubscription.add(unfollowSubscription);
 
     }
