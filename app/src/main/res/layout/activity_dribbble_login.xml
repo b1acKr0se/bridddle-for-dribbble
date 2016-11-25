@@ -8,32 +8,31 @@
     tools:context="io.b1ackr0se.bridddle.ui.login.DribbbleLoginActivity">
 
     <android.support.v7.widget.CardView
-        android:layout_width="250dp"
+        android:layout_width="220dp"
         android:layout_height="150dp"
         android:layout_gravity="center">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="invisible"/>
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="invisible"/>
 
-            <Button
-                android:id="@+id/login"
-                android:background="@color/colorAccent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="@android:color/white"
-                android:padding="8dp"
-                android:text="LOGIN TO DRIBBBLE"/>
-        </FrameLayout>
-
+                <Button
+                    android:id="@+id/login"
+                    android:background="@color/colorAccent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@android:color/white"
+                    android:padding="8dp"
+                    android:text="LOGIN TO DRIBBBLE"/>
+            </FrameLayout>
 
     </android.support.v7.widget.CardView>
 
