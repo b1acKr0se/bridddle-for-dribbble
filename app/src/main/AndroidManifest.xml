@@ -47,6 +47,15 @@
             android:name=".ui.user.UserActivity"
             android:theme="@style/AppTheme.Shot.NoActionBar">
         </activity>
+
+        <!-- Glide configurations for image loading -->
+        <meta-data
+            android:name="io.b1ackr0se.bridddle.util.GlideConfiguration"
+            android:value="GlideModule" />
+        <meta-data
+            android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
+            android:value="GlideModule" />
+
     </application>
 
 </manifest>
