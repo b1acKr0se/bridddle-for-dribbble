@@ -41,7 +41,6 @@ public class DribbbleLoginActivity extends BaseActivity implements View.OnClickL
         presenter.attachView(this);
 
         login.setOnClickListener(this);
-        root.setOnClickListener(this);
 
         if (getIntent().getBooleanExtra("command_login", false)) {
             doLogin();
@@ -78,9 +77,6 @@ public class DribbbleLoginActivity extends BaseActivity implements View.OnClickL
         switch (view.getId()) {
             case R.id.login:
                 doLogin();
-                break;
-            case R.id.root:
-                dismiss();
                 break;
         }
     }
