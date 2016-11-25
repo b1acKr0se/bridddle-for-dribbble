@@ -30,6 +30,7 @@ import butterknife.OnClick;
 import io.b1ackr0se.bridddle.MainActivity;
 import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
+import io.b1ackr0se.bridddle.base.TransitionBaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.model.User;
 import io.b1ackr0se.bridddle.ui.common.OnShotClickListener;
@@ -39,7 +40,7 @@ import io.b1ackr0se.bridddle.ui.login.DribbbleLoginActivity;
 import io.b1ackr0se.bridddle.util.LinkUtils;
 import io.b1ackr0se.bridddle.util.SoftKey;
 
-public class UserActivity extends BaseActivity implements UserView, OnShotClickListener {
+public class UserActivity extends TransitionBaseActivity implements UserView, OnShotClickListener {
     @BindView(R.id.nested_scroll_view) NestedScrollView nestedScrollView;
     @BindView(R.id.profile_view) View profileView;
     @BindView(R.id.empty_shot) TextView empty;
