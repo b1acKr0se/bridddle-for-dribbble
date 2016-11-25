@@ -93,7 +93,6 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         Intent intent = new Intent(this, SearchActivity.class);
         intent.putExtra("search_type", SearchPresenter.SEARCH_QUERY);
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_up, R.anim.iddle);
     }
 
     private void changeTab(int position) {

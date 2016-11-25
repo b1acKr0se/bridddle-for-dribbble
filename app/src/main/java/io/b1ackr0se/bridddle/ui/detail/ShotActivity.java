@@ -44,6 +44,7 @@ import butterknife.OnClick;
 import io.b1ackr0se.bridddle.MainActivity;
 import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
+import io.b1ackr0se.bridddle.base.TransitionBaseActivity;
 import io.b1ackr0se.bridddle.data.model.Comment;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.model.User;
@@ -62,7 +63,7 @@ import io.b1ackr0se.bridddle.util.LinkUtils;
 import io.b1ackr0se.bridddle.util.SoftKey;
 
 
-public class ShotActivity extends BaseActivity implements OnColorClickListener, OnUserClickListener, ShotView {
+public class ShotActivity extends TransitionBaseActivity implements OnColorClickListener, OnUserClickListener, ShotView {
     @BindView(R.id.nested_scroll_view) NestedScrollView nestedScrollView;
     @BindView(R.id.imageview_shot) AspectRatioImageView shotImageView;
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -124,7 +125,6 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
         Intent intent = new Intent(context, ShotActivity.class);
         intent.putExtra("shot", shot);
         context.startActivity(intent);
-        context.overridePendingTransition(R.anim.slide_up, R.anim.iddle);
     }
 
 
@@ -327,7 +327,6 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(0, R.anim.slide_down);
     }
 
     @Override
@@ -336,7 +335,6 @@ public class ShotActivity extends BaseActivity implements OnColorClickListener, 
         intent.putExtra("search_type", SearchPresenter.SEARCH_COLOR);
         intent.putExtra("color", color);
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_up, R.anim.iddle);
     }
 
     @Override

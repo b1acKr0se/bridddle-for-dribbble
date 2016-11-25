@@ -23,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.b1ackr0se.bridddle.R;
 import io.b1ackr0se.bridddle.base.BaseActivity;
+import io.b1ackr0se.bridddle.base.TransitionBaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleSearch;
 import io.b1ackr0se.bridddle.ui.common.OnShotClickListener;
@@ -35,7 +36,7 @@ import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
-public class SearchActivity extends BaseActivity implements SearchView, OnShotClickListener {
+public class SearchActivity extends TransitionBaseActivity implements SearchView, OnShotClickListener {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.toolbar_container) View toolbarContainer;
@@ -164,7 +165,6 @@ public class SearchActivity extends BaseActivity implements SearchView, OnShotCl
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(0, R.anim.slide_down);
     }
 
     @Override
