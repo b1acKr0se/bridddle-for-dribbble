@@ -12,6 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.TranslucentBars">
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="${apiKey}"
+            />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -51,10 +56,10 @@
         <!-- Glide configurations for image loading -->
         <meta-data
             android:name="io.b1ackr0se.bridddle.util.GlideConfiguration"
-            android:value="GlideModule" />
+            android:value="GlideModule"/>
         <meta-data
             android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
-            android:value="GlideModule" />
+            android:value="GlideModule"/>
 
     </application>
 
