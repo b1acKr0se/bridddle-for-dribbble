@@ -3,15 +3,19 @@ package io.b1ackr0se.bridddle;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,6 +26,7 @@ import io.b1ackr0se.bridddle.ui.search.SearchActivity;
 import io.b1ackr0se.bridddle.ui.search.SearchPresenter;
 import io.b1ackr0se.bridddle.ui.widget.AppBarStateListener;
 import io.b1ackr0se.bridddle.ui.widget.SlideDisabledViewPager;
+import io.b1ackr0se.bridddle.util.AuthenticationManager;
 
 public class MainActivity extends BaseActivity implements OnTabSelectListener {
     public static final int REQUEST_CODE_LOGIN = 1;
@@ -30,7 +35,11 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     @BindView(R.id.view_pager) SlideDisabledViewPager viewPager;
     @BindView(R.id.bottom_bar) BottomBar bottomBar;
 
+    @Inject AuthenticationManager authenticationManager;
+
+    private Menu menu;
     private boolean isToolbarShowing = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +47,9 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+
+        getActivityComponent().inject(this);
+
         setSupportActionBar(toolbar);
 
         appBarLayout.addOnOffsetChangedListener(new AppBarStateListener() {
@@ -57,21 +69,41 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        setLoginMenuTitle(authenticationManager.isLoggedIn());
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.login) {
-            startActivityForResult(new Intent(this, DribbbleLoginActivity.class), REQUEST_CODE_LOGIN);
+            if (authenticationManager.isLoggedIn()) {
+                Toast.makeText(getApplicationContext(), "Log out successfully!", Toast.LENGTH_SHORT).show();
+                authenticationManager.logout();
+                setLoginMenuTitle(false);
+            } else {
+                startActivityForResult(new Intent(this, DribbbleLoginActivity.class), REQUEST_CODE_LOGIN);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onLoggedIn() {
+        setLoginMenuTitle(true);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setLoginMenuTitle(authenticationManager.isLoggedIn());
+    }
+
+    private void setLoginMenuTitle(boolean isLoggedIn) {
+        if (menu != null) {
+            menu.findItem(R.id.login).setTitle(isLoggedIn ? "Logout" : "Login");
+        }
     }
 
     @Override

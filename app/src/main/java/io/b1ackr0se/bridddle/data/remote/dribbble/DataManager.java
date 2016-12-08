@@ -29,51 +29,51 @@ public class DataManager {
     }
 
     public Observable<List<Shot>> getPopular(int page, int pageSize) {
-        return dribbbleApi.getPopular(authenticationManager.getAccessToken(), page, pageSize);
+        return dribbbleApi.getPopular(authenticationManager.buildRequestHeader(), page, pageSize);
     }
 
     public Observable<User> getAuthenticatedUser() {
-        return dribbbleApi.getAuthenticatedUser(authenticationManager.getAccessToken());
+        return dribbbleApi.getAuthenticatedUser(authenticationManager.buildRequestHeader());
     }
 
     public Observable<List<LikedShot>> getUserLikes() {
-        return dribbbleApi.getLikesOfAuthenticatedUser(authenticationManager.getAccessToken());
+        return dribbbleApi.getLikesOfAuthenticatedUser(authenticationManager.buildRequestHeader());
     }
 
     public Observable<User> getUser(int id) {
-        return dribbbleApi.getUser(authenticationManager.getAccessToken(), id);
+        return dribbbleApi.getUser(authenticationManager.buildRequestHeader(), id);
     }
 
     public Observable<Response<Void>> following(int id) {
-        return dribbbleApi.following(authenticationManager.getAccessToken(), id);
+        return dribbbleApi.following(authenticationManager.buildRequestHeader(), id);
     }
 
     public Observable<Void> follow(int id) {
-        return dribbbleApi.follow(authenticationManager.getAccessToken(), id);
+        return dribbbleApi.follow(authenticationManager.buildRequestHeader(), id);
     }
 
     public Observable<Void> unfollow(int id) {
-        return dribbbleApi.unfollow(authenticationManager.getAccessToken(), id);
+        return dribbbleApi.unfollow(authenticationManager.buildRequestHeader(), id);
     }
 
     public Observable<List<Shot>> getUserShots(int id, int page, int pageSize) {
-        return dribbbleApi.getUserShots(authenticationManager.getAccessToken(), id, page, pageSize);
+        return dribbbleApi.getUserShots(authenticationManager.buildRequestHeader(), id, page, pageSize);
     }
 
     public Observable<List<Comment>> getComments(int id, int page, int pageSize) {
-        return dribbbleApi.getComments(authenticationManager.getAccessToken(), id, page, pageSize);
+        return dribbbleApi.getComments(authenticationManager.buildRequestHeader(), id, page, pageSize);
     }
 
     public Observable<Like> liked(int id) {
-        return dribbbleApi.liked(authenticationManager.getAccessToken(), id);
+        return dribbbleApi.liked(authenticationManager.buildRequestHeader(), id);
     }
 
     public Observable<Like> like(int id) {
-        return dribbbleApi.like(authenticationManager.getAccessToken(), id);
+        return dribbbleApi.like(authenticationManager.buildRequestHeader(), id);
     }
 
     public Observable<Void> unlike(int id) {
-        return dribbbleApi.unlike(authenticationManager.getAccessToken(), id);
+        return dribbbleApi.unlike(authenticationManager.buildRequestHeader(), id);
     }
 
 }

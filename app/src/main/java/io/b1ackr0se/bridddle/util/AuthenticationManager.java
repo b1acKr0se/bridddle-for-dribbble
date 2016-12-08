@@ -21,8 +21,12 @@ public class AuthenticationManager {
         return PreferenceManager.getDefaultSharedPreferences(context).getString("access_token", null) != null;
     }
 
-    public String getAccessToken() {
+    public String buildRequestHeader() {
         String accessToken = PreferenceManager.getDefaultSharedPreferences(context).getString("access_token", null);
         return "Bearer " + (accessToken == null ? BuildConfig.DRIBBBLE_ACCESS_TOKEN : accessToken);
+    }
+
+    public void logout() {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().remove("access_token").apply();
     }
 }

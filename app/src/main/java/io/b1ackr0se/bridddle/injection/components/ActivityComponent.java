@@ -1,6 +1,7 @@
 package io.b1ackr0se.bridddle.injection.components;
 
 import dagger.Component;
+import io.b1ackr0se.bridddle.MainActivity;
 import io.b1ackr0se.bridddle.injection.PerActivity;
 import io.b1ackr0se.bridddle.injection.modules.ActivityModule;
 import io.b1ackr0se.bridddle.ui.detail.ShotActivity;
@@ -24,4 +25,6 @@ public interface ActivityComponent {
     void inject(ShotActivity activity);
 
     void inject(UserActivity activity);
+
+    void inject(MainActivity activity);
 }
