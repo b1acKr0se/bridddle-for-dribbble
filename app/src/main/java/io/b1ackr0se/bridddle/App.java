@@ -19,12 +19,10 @@ public class App extends Application {
         super.onCreate();
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
-                .build();
+                .build(); 
         appComponent.inject(this);
 
-        if (BuildConfig.USE_CRASHLYTICS) {
-            Fabric.with(this, new Crashlytics());
-        }
+        Fabric.with(this, new Crashlytics());
     }
 
     public static App getApplication(Context context) {

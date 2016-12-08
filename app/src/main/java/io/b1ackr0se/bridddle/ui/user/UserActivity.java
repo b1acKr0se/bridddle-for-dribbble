@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +62,7 @@ public class UserActivity extends TransitionBaseActivity implements UserView, On
 
     @OnClick(R.id.more_latest_shot)
     public void showMoreShots() {
-
+        
     }
 
     @OnClick(R.id.follow)
@@ -153,9 +154,9 @@ public class UserActivity extends TransitionBaseActivity implements UserView, On
             location.setVisibility(View.VISIBLE);
         }
 
-        shotCount.setText((user.getShotsCount() == null) ? "" : String.valueOf(user.getShotsCount()));
-        followerCount.setText((user.getFollowersCount() == null) ? "" : String.valueOf(user.getFollowersCount()));
-        likesCount.setText((user.getLikesCount() == null) ? "" : String.valueOf(user.getLikesCount()));
+        shotCount.setText((user.getShotsCount() == null) ? "" : NumberFormat.getIntegerInstance().format(user.getShotsCount()));
+        followerCount.setText((user.getFollowersCount() == null) ? "" : NumberFormat.getIntegerInstance().format(user.getFollowersCount()));
+        likesCount.setText((user.getLikesCount() == null) ? "" : NumberFormat.getIntegerInstance().format(user.getLikesCount()));
 
         if (user.getBio() == null) {
             bio.setVisibility(View.GONE);

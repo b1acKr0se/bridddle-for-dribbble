@@ -3,7 +3,7 @@ apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'android-apt'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'io.fabric'
-
+apply plugin: 'com.getkeepsafe.dexcount'
 
 def gitTag = 'git describe --tags'.execute([], project.rootDir).text.trim()
 def gitCommitCount = 100 + Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
@@ -26,6 +26,16 @@ def initFabricProperties() {
     }
 }
 
+buildscript {
+    repositories {
+        mavenCentral() // or jcenter()
+    }
+
+    dependencies {
+        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.1'
+    }
+}
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
@@ -42,18 +52,14 @@ android {
         buildConfigField "String", "DRIBBBLE_ACCESS_TOKEN", "\"${DRIBBBLE_ACCESS_TOKEN}\""
 
         vectorDrawables.useSupportLibrary = true
+        manifestPlaceholders = [ apiKey:fabricApiKey ]
+
     }
     buildTypes {
-        debug {
-            buildConfigField "boolean", "USE_CRASHLYTICS", "false"
-            ext.enableCrashlytics = false
-        }
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "boolean", "USE_CRASHLYTICS", "true"
-            ext.enableCrashlytics = true
         }
     }
     compileOptions {
