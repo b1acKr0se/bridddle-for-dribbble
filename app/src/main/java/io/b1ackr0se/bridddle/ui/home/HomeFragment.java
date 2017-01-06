@@ -88,7 +88,7 @@ public class HomeFragment extends Fragment implements HomeView, OnShotClickListe
 
         presenter.attachView(this);
 
-        presenter.loadShots(true);
+        presenter.loadShots();
 
         return view;
     }

@@ -23,10 +23,14 @@ public class HomePresenter extends BasePresenter<HomeView> {
     @Override
     public void detachView() {
         super.detachView();
-        subscription.unsubscribe();
+        if (subscription != null) subscription.unsubscribe();
     }
 
-    void loadShots(boolean firstPage) {
+    public void loadShots() {
+        loadShots(true);
+    }
+
+    public void loadShots(boolean firstPage) {
         if (firstPage) {
             currentPage = 1;
             getView().showProgress(true);

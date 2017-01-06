@@ -1,6 +1,6 @@
 language: android
 
-script: "./gradlew clean assembleDebug"
+script: "./gradlew clean check"
 
 android:
   components:
