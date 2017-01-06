@@ -25,16 +25,16 @@ public class ShotPresenter extends BasePresenter<ShotView> {
         this.dataManager = dataManager;
     }
 
-    void setShot(Shot shot) {
+    public void setShot(Shot shot) {
         this.shot = shot;
     }
 
-    void load() {
+    public void load() {
         getView().bind();
         loadComment(true);
     }
 
-    void loadComment(boolean firstPage) {
+    public void loadComment(boolean firstPage) {
 
         if (shot == null) return;
 

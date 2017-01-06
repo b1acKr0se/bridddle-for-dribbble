@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import io.b1ackr0se.bridddle.data.model.Comment;
 import io.b1ackr0se.bridddle.data.model.Images;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.model.User;
@@ -60,6 +61,16 @@ public class MockModel {
         return user;
     }
 
+    public static Comment newComment() {
+        Comment comment = new Comment();
+        comment.setId(102);
+        comment.setUser(newUser());
+        comment.setLikesCount(randomInt());
+        comment.setBody(randomString());
+        comment.setCreatedAt(new Date());
+        return comment;
+    }
+
     public static List<Shot> newShotList(int size) {
         List<Shot> list = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -68,6 +79,13 @@ public class MockModel {
         return list;
     }
 
+    public static List<Comment> newCommentList(int size) {
+        List<Comment> list = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            list.add(newComment());
+        }
+        return list;
+    }
 
 
 }
