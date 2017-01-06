@@ -1,0 +1,73 @@
+package io.b1ackr0se.bridddle.test.common;
+
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+
+import io.b1ackr0se.bridddle.data.model.Images;
+import io.b1ackr0se.bridddle.data.model.Shot;
+import io.b1ackr0se.bridddle.data.model.User;
+
+public class MockModel {
+    public static String randomString() {
+        return UUID.randomUUID().toString();
+    }
+
+    public static int randomInt() {
+        return new Random().nextInt();
+    }
+
+    public static Shot newShot() {
+        Shot shot = new Shot();
+        shot.setId(1);
+        shot.setTitle(randomString());
+        shot.setDescription(randomString());
+        shot.setImages(newImages());
+        shot.setViewsCount(randomInt());
+        shot.setLikesCount(randomInt());
+        shot.setCommentsCount(randomInt());
+        shot.setCreatedAt(new Date());
+        shot.setAnimated(Math.random() < 0.5);
+        shot.setUser(newUser());
+
+        return shot;
+    }
+
+    public static Images newImages() {
+        Images image = new Images();
+        image.setNormal("https://d13yacurqjgara.cloudfront.net/users/120724/screenshots/3196285/nowhere-stairs-2_1x.jpg");
+        return image;
+    }
+
+    public static User newUser() {
+        User user = new User();
+        user.setId(100);
+        user.setName(randomString());
+        user.setUsername(randomString());
+        user.setAvatarUrl("https://d13yacurqjgara.cloudfront.net/users/123657/avatars/small/8703d989765b74eb335037b05176d0c8.png?1464068871");
+        user.setBio(randomString());
+        user.setLocation(randomString());
+        user.setCommentsReceivedCount(randomInt());
+        user.setFollowersCount(randomInt());
+        user.setLikesCount(randomInt());
+        user.setFollowingsCount(randomInt());
+        user.setLikesReceivedCount(randomInt());
+        user.setShotsCount(randomInt());
+
+        return user;
+    }
+
+    public static List<Shot> newShotList(int size) {
+        List<Shot> list = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            list.add(newShot());
+        }
+        return list;
+    }
+
+
+
+}
