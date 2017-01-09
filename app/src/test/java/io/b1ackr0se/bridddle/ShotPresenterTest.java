@@ -20,7 +20,9 @@ import io.b1ackr0se.bridddle.ui.detail.ShotPresenter;
 import io.b1ackr0se.bridddle.ui.detail.ShotView;
 import rx.Observable;
 
+import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 
@@ -62,23 +64,28 @@ public class ShotPresenterTest {
 
         dataManagerReturnFakeComment(Observable.just(comments));
 
+        presenter.loadComment(true);
+
         verify(mockView).showComments(comments);
     }
 
     @Test
     public void testGetCommentsFailed() {
-
         dataManagerReturnFakeComment(Observable.error(new RuntimeException()));
 
+        presenter.loadComment(true);
+
         verify(mockView).showError();
+        verify(mockView, never()).showComments(anyListOf(Comment.class));
     }
 
     @Test
     public void testGetNoComment() {
-
         List<Comment> comments = new ArrayList<>();
 
         dataManagerReturnFakeComment(Observable.just(comments));
+
+        presenter.loadComment(true);
 
         verify(mockView).showNoComment();
     }
@@ -89,6 +96,28 @@ public class ShotPresenterTest {
         presenter.setShot(shot);
 
         dataManagerLoginStatus(false);
+
+        presenter.checkLike();
+
+        verify(mockView).showLike(false);
+    }
+
+    @Test
+    public void showLikeWhenLoggedIn() {
+        dataManagerLoginStatus(true);
+
+        dataManagerCheckLike(true);
+
+        presenter.checkLike();
+
+        verify(mockView).showLike(true);
+    }
+
+    @Test
+    public void showUnlikeWhenLoggedIn() {
+        dataManagerLoginStatus(true);
+
+        dataManagerCheckLike(false);
 
         presenter.checkLike();
 
@@ -128,6 +157,7 @@ public class ShotPresenterTest {
 
         presenter.like();
 
+        verify(mockView, never()).performLogin();
         verify(mockView).showLike(true);
     }
 
@@ -157,6 +187,7 @@ public class ShotPresenterTest {
 
         presenter.unlike();
 
+        verify(mockView, never()).performLogin();
         verify(mockView).showLike(false);
     }
 
@@ -168,8 +199,6 @@ public class ShotPresenterTest {
         doReturn(observable)
                 .when(mockDataManager)
                 .getComments(shot.getId(), 1, 40);
-
-        presenter.loadComment(true);
     }
 
     public void dataManagerLoginStatus(boolean isLoggedIn) {
@@ -182,6 +211,16 @@ public class ShotPresenterTest {
         doReturn(Observable.just(MockModel.newLike()))
                 .when(mockDataManager)
                 .like(id);
+    }
+
+    public void dataManagerCheckLike(boolean liked) {
+        Shot shot = MockModel.newShot();
+
+        presenter.setShot(shot);
+
+        doReturn(liked ? Observable.just(MockModel.newLike()) : Observable.error(new RuntimeException()))
+                .when(mockDataManager)
+                .liked(shot.getId());
     }
 
 }
