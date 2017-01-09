@@ -77,8 +77,6 @@ public class HomeFragment extends Fragment implements HomeView, OnShotClickListe
         endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore() {
-                shots.add(null);
-                adapter.notifyItemInserted(shots.size() - 1);
                 presenter.loadShots(false);
             }
         };
@@ -94,35 +92,48 @@ public class HomeFragment extends Fragment implements HomeView, OnShotClickListe
     }
 
     @Override
-    public void showProgress(boolean show) {
+    public void showInitialProgress(boolean show) {
         swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(show));
+        noInternetIndicator.setVisibility(View.GONE);
     }
 
     @Override
     public void showShots(List<Shot> list) {
-        noInternetIndicator.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
-        showProgress(false);
-        if (!shots.isEmpty())
-            shots.remove(shots.size() - 1);
-        else recyclerView.scheduleLayoutAnimation();
+        recyclerView.scheduleLayoutAnimation();
         endlessRecyclerOnScrollListener.setLoaded();
         shots.addAll(list);
         adapter.notifyDataSetChanged();
     }
 
     @Override
-    public void showError() {
-        if(!shots.isEmpty()  && shots.get(shots.size() - 1) == null) {
+    public void showMoreShots(List<Shot> list) {
+        endlessRecyclerOnScrollListener.setLoaded();
+        shots.addAll(list);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showContinuousProgress(boolean show) {
+        if (show) {
+            shots.add(null);
+            adapter.notifyItemInserted(shots.size() - 1);
+        } else {
             shots.remove(shots.size() - 1);
             adapter.notifyItemRemoved(shots.size());
-            endlessRecyclerOnScrollListener.setLoaded();
-            Toast.makeText(getContext(), "Failed to load more shots", Toast.LENGTH_SHORT).show();
-        } else {
-            showProgress(false);
-            recyclerView.setVisibility(View.GONE);
-            noInternetIndicator.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void showLoadMoreError() {
+        endlessRecyclerOnScrollListener.setLoaded();
+        Toast.makeText(getContext(), "Failed to load more shots", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showError() {
+        recyclerView.setVisibility(View.GONE);
+        noInternetIndicator.setVisibility(View.VISIBLE);
     }
 
     @Override
