@@ -60,13 +60,16 @@ public class ShotPresenter extends BasePresenter<ShotView> {
 
     }
 
-    void checkLike() {
+    public void checkLike() {
         if (!dataManager.isLoggedIn()) {
             getView().showLike(false);
             return;
         }
 
-        if (shot == null) return;
+        if (shot == null) {
+            getView().showLike(false);
+            return;
+        }
 
 
         Subscription subscription = dataManager.liked(shot.getId())
@@ -80,7 +83,7 @@ public class ShotPresenter extends BasePresenter<ShotView> {
         compositeSubscription.add(subscription);
     }
 
-    void like() {
+    public void like() {
         if (!dataManager.isLoggedIn()) {
             getView().showLike(false);
             getView().performLogin();
@@ -100,7 +103,7 @@ public class ShotPresenter extends BasePresenter<ShotView> {
 
     }
 
-    void unlike() {
+    public void unlike() {
         if (!dataManager.isLoggedIn()) {
             getView().showLike(false);
             getView().performLogin();

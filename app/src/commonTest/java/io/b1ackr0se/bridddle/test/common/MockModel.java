@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import io.b1ackr0se.bridddle.data.model.Comment;
 import io.b1ackr0se.bridddle.data.model.Images;
+import io.b1ackr0se.bridddle.data.model.Like;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.model.User;
 
@@ -69,6 +70,10 @@ public class MockModel {
         comment.setBody(randomString());
         comment.setCreatedAt(new Date());
         return comment;
+    }
+
+    public static Like newLike() {
+        return new Like(100, new Date(), newUser(), newShot());
     }
 
     public static List<Shot> newShotList(int size) {

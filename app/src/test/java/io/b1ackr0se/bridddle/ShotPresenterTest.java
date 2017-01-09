@@ -83,9 +83,86 @@ public class ShotPresenterTest {
         verify(mockView).showNoComment();
     }
 
+    @Test
+    public void showUnlikeWhenNotLoggedIn() {
+        Shot shot = MockModel.newShot();
+        presenter.setShot(shot);
+
+        dataManagerLoginStatus(false);
+
+        presenter.checkLike();
+
+        verify(mockView).showLike(false);
+    }
+
+    @Test
+    public void showUnlikeWhenShotIsNull() {
+        dataManagerLoginStatus(false);
+
+        presenter.checkLike();
+
+        verify(mockView).showLike(false);
+    }
+
+    @Test
+    public void testLikeWhenNotLoggedIn() {
+        Shot shot = MockModel.newShot();
+        presenter.setShot(shot);
+
+        dataManagerLoginStatus(false);
+
+        presenter.like();
+
+        verify(mockView).showLike(false);
+        verify(mockView).performLogin();
+    }
+
+    @Test
+    public void testLikeWhenLoggedIn() {
+        Shot shot = MockModel.newShot();
+        presenter.setShot(shot);
+
+        dataManagerLoginStatus(true);
+
+        dataManagerReturnLike(shot.getId());
+
+        presenter.like();
+
+        verify(mockView).showLike(true);
+    }
+
+    @Test
+    public void testUnlikeWhenNotLoggedIn() {
+        Shot shot = MockModel.newShot();
+        presenter.setShot(shot);
+
+        dataManagerLoginStatus(false);
+
+        presenter.unlike();
+
+        verify(mockView).showLike(false);
+        verify(mockView).performLogin();
+    }
+
+    @Test
+    public void testUnlikeWhenLoggedIn() {
+        Shot shot = MockModel.newShot();
+        presenter.setShot(shot);
+
+        dataManagerLoginStatus(true);
+
+        doReturn(Observable.empty())
+                .when(mockDataManager)
+                .unlike(shot.getId());
+
+        presenter.unlike();
+
+        verify(mockView).showLike(false);
+    }
+
+
     public void dataManagerReturnFakeComment(Observable observable) {
         Shot shot = MockModel.newShot();
-
         presenter.setShot(shot);
 
         doReturn(observable)
@@ -93,6 +170,18 @@ public class ShotPresenterTest {
                 .getComments(shot.getId(), 1, 40);
 
         presenter.loadComment(true);
+    }
+
+    public void dataManagerLoginStatus(boolean isLoggedIn) {
+        doReturn(isLoggedIn)
+                .when(mockDataManager)
+                .isLoggedIn();
+    }
+
+    public void dataManagerReturnLike(int id) {
+        doReturn(Observable.just(MockModel.newLike()))
+                .when(mockDataManager)
+                .like(id);
     }
 
 }
