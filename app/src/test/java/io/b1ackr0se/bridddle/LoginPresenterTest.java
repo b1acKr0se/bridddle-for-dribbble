@@ -48,7 +48,7 @@ public class LoginPresenterTest {
     }
 
     @Test
-    public void testLogInSuccessful() {
+    public void testGetAccessTokenSuccessful() {
         String mockCode = UUID.randomUUID().toString();
 
         AccessToken mockAccessToken = MockModel.newAccessToken();
@@ -65,7 +65,7 @@ public class LoginPresenterTest {
     }
 
     @Test
-    public void testLogInFailed() {
+    public void testGetAccessTokenFailed() {
         String mockCode = UUID.randomUUID().toString();
 
         doReturn(Observable.error(new RuntimeException()))
