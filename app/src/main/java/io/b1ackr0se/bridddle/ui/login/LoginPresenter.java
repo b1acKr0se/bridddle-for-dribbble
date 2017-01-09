@@ -22,7 +22,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         authenticationManager = pref;
     }
 
-    void getAccessToken(String code) {
+    public void getAccessToken(String code) {
         dribbbleApi.getAccessToken(BuildConfig.DRIBBBLE_CLIENT_ID, BuildConfig.DRIBBBLE_CLIENT_SECRET, code)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

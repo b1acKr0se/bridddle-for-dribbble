@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import io.b1ackr0se.bridddle.data.model.AccessToken;
 import io.b1ackr0se.bridddle.data.model.Comment;
 import io.b1ackr0se.bridddle.data.model.Images;
 import io.b1ackr0se.bridddle.data.model.Like;
@@ -74,6 +75,14 @@ public class MockModel {
 
     public static Like newLike() {
         return new Like(100, new Date(), newUser(), newShot());
+    }
+
+    public static AccessToken newAccessToken() {
+        AccessToken accessToken = new AccessToken();
+        accessToken.scope = randomString();
+        accessToken.accessToken = randomString();
+        accessToken.tokenType = randomString();
+        return accessToken;
     }
 
     public static List<Shot> newShotList(int size) {
