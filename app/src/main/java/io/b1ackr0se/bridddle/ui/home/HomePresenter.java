@@ -30,20 +30,42 @@ public class HomePresenter extends BasePresenter<HomeView> {
         loadShots(true);
     }
 
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void increasePage() {
+        currentPage++;
+    }
+
     public void loadShots(boolean firstPage) {
         if (firstPage) {
             currentPage = 1;
-            getView().showProgress(true);
+            getView().showInitialProgress(true);
+        } else {
+            getView().showContinuousProgress(true);
         }
+
         subscription = dataManager.getPopular(currentPage, PER_PAGE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(shots -> {
-                    getView().showShots(shots);
-                    currentPage++;
+                    if(firstPage) {
+                        getView().showInitialProgress(false);
+                        getView().showShots(shots);
+                    } else {
+                        getView().showContinuousProgress(false);
+                        getView().showMoreShots(shots);
+                    }
+                    increasePage();
                 }, throwable -> {
-                    throwable.printStackTrace();
-                    getView().showError();
+                    if (firstPage) {
+                        getView().showInitialProgress(false);
+                        getView().showError();
+                    } else {
+                        getView().showContinuousProgress(false);
+                        getView().showLoadMoreError();
+                    }
                 });
     }
 }

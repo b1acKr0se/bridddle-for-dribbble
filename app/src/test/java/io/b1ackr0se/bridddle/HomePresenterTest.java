@@ -19,6 +19,7 @@ import io.b1ackr0se.bridddle.ui.home.HomePresenter;
 import io.b1ackr0se.bridddle.ui.home.HomeView;
 import rx.Observable;
 
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
@@ -48,25 +49,53 @@ public class HomePresenterTest {
     }
 
     @Test
-    public void loadShotSuccessful() {
+    public void loadInitialShotsSuccessful() {
         List<Shot> shotList = MockModel.newShotList(50);
+
         dataManagerGetPopularShots(Observable.just(shotList), 1);
 
         homePresenter.loadShots();
 
-        verify(mockHomeView).showProgress(true);
+        verify(mockHomeView).showInitialProgress(true);
         verify(mockHomeView).showShots(shotList);
-
     }
 
     @Test
-    public void loadShotFailed() {
+    public void loadInitialShotsFailed() {
         dataManagerGetPopularShots(Observable.error(new RuntimeException()), 1);
+
         homePresenter.loadShots();
 
-        verify(mockHomeView).showProgress(true);
+        verify(mockHomeView).showInitialProgress(true);
         verify(mockHomeView, never()).showShots(anyListOf(Shot.class));
         verify(mockHomeView).showError();
+    }
+
+    @Test
+    public void loadMoreShotsSuccessful() {
+        List<Shot> shotList = MockModel.newShotList(50);
+
+        dataManagerGetPopularShots(Observable.just(shotList), homePresenter.getCurrentPage());
+
+        homePresenter.loadShots(false);
+
+        verify(mockHomeView, never()).showInitialProgress(anyBoolean());
+        verify(mockHomeView).showContinuousProgress(true);
+        verify(mockHomeView).showContinuousProgress(false);
+        verify(mockHomeView, never()).showShots(anyListOf(Shot.class));
+        verify(mockHomeView).showMoreShots(shotList);
+    }
+
+    @Test
+    public void loadMoreShotsFailed() {
+        dataManagerGetPopularShots(Observable.error(new RuntimeException()), homePresenter.getCurrentPage());
+
+        homePresenter.loadShots(false);
+
+        verify(mockHomeView, never()).showInitialProgress(anyBoolean());
+        verify(mockHomeView).showContinuousProgress(true);
+        verify(mockHomeView).showContinuousProgress(false);
+        verify(mockHomeView).showLoadMoreError();
     }
 
 
