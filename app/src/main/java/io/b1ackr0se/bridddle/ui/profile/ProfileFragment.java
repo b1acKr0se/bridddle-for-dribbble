@@ -128,7 +128,6 @@ public class ProfileFragment extends Fragment implements ProfileView, SwipeRefre
 
     @Override
     public void showProfile(User user) {
-        onLoginStatus(true);
         Glide.with(getContext()).load(user.getAvatarUrl())
                 .asBitmap()
                 .centerCrop()

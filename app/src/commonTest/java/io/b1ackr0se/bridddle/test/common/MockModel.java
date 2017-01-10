@@ -11,6 +11,7 @@ import io.b1ackr0se.bridddle.data.model.AccessToken;
 import io.b1ackr0se.bridddle.data.model.Comment;
 import io.b1ackr0se.bridddle.data.model.Images;
 import io.b1ackr0se.bridddle.data.model.Like;
+import io.b1ackr0se.bridddle.data.model.LikedShot;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.model.User;
 
@@ -77,6 +78,12 @@ public class MockModel {
         return new Like(100, new Date(), newUser(), newShot());
     }
 
+    public static LikedShot newLikedShot() {
+        LikedShot shot = new LikedShot();
+        shot.setShot(newShot());
+        return shot;
+    }
+
     public static AccessToken newAccessToken() {
         AccessToken accessToken = new AccessToken();
         accessToken.scope = randomString();
@@ -101,5 +108,11 @@ public class MockModel {
         return list;
     }
 
-
+    public static List<LikedShot> newLikedShotList(int size) {
+        List<LikedShot> list = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            list.add(newLikedShot());
+        }
+        return list;
+    }
 }
