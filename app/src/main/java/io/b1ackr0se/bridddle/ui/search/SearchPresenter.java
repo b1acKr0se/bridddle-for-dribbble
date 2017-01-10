@@ -1,10 +1,6 @@
 package io.b1ackr0se.bridddle.ui.search;
 
-import android.support.annotation.IntDef;
-
 import java.io.IOException;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -44,6 +40,8 @@ public class SearchPresenter extends BasePresenter<SearchView> {
         if (!continuousRequest) {
             getView().showProgress(true);
             page = 1;
+        } else {
+            getView().showContinuosProgress(true);
         }
 
         subscription = (searchType == SEARCH_QUERY ? dribbbleSearch.search(query, page, 20, sortingOrder) : dribbbleSearch.color(query, page, 20, sortingOrder))
@@ -64,15 +62,26 @@ public class SearchPresenter extends BasePresenter<SearchView> {
 
                     @Override
                     public void onError(Throwable e) {
+                        if(continuousRequest) {
+                            getView().showContinuosProgress(false);
+                        } else {
+                            getView().showProgress(false);
+                        }
                         getView().showError();
                     }
 
                     @Override
                     public void onNext(List<Shot> list) {
                         page++;
-                        getView().showProgress(false);
-                        if (list.isEmpty()) getView().showEmpty();
-                        else getView().showResult(list, !continuousRequest);
+
+                        if(continuousRequest) {
+                            getView().showContinuosProgress(false);
+                            getView().showMoreResult(list);
+                        } else {
+                            getView().showProgress(false);
+                            if(list.isEmpty()) getView().showEmpty();
+                            else getView().showResult(list);
+                        }
                     }
                 });
     }

@@ -22,7 +22,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.b1ackr0se.bridddle.R;
-import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.base.TransitionBaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DribbbleSearch;
@@ -103,8 +102,6 @@ public class SearchActivity extends TransitionBaseActivity implements SearchView
         endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore() {
-                shots.add(null);
-                shotAdapter.notifyItemInserted(shots.size() - 1);
                 searchPresenter.search(searchType, DribbbleSearch.SORT_POPULAR, true);
             }
         };
@@ -182,28 +179,42 @@ public class SearchActivity extends TransitionBaseActivity implements SearchView
     }
 
     @Override
+    public void showContinuosProgress(boolean show) {
+        if(show) {
+            shots.add(null);
+            shotAdapter.notifyItemInserted(shots.size() - 1);
+        } else {
+            if (!shots.isEmpty() && shots.get(shots.size() - 1) == null) {
+                shots.remove(shots.size() - 1);
+                shotAdapter.notifyItemRemoved(shots.size());
+            }
+        }
+    }
+
+    @Override
     public void showEmpty() {
-        showProgress(false);
         empty.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
     }
 
     @Override
     public void showError() {
-        showProgress(false);
         Toast.makeText(this, "Cannot retrieve search results", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void showResult(List<Shot> resuls, boolean newQuery) {
+    public void showResult(List<Shot> results) {
         recyclerView.setVisibility(View.VISIBLE);
-        if (newQuery) {
-            shots.clear();
-        } else {
-            if (!shots.isEmpty())
-                shots.remove(shots.size() - 1);
-        }
         endlessRecyclerOnScrollListener.setLoaded();
-        shots.addAll(resuls);
+        shots.clear();
+        shots.addAll(results);
+        shotAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showMoreResult(List<Shot> results) {
+        endlessRecyclerOnScrollListener.setLoaded();
+        shots.addAll(results);
         shotAdapter.notifyDataSetChanged();
     }
 
