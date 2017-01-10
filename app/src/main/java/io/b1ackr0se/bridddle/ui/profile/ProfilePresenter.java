@@ -27,10 +27,13 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         subscription = new CompositeSubscription();
     }
 
-    void getAuthUser(boolean forceReload) {
+    public void getAuthUser() {
+        getAuthUser(true);
+    }
+
+    public void getAuthUser(boolean forceReload) {
         if (authUser != null && !forceReload)
             subscription.add(Observable.just(authUser).subscribe(user -> getView().showProfile(user)));
-
         else {
             subscription.add(
                     dataManager.getAuthenticatedUser()
@@ -51,6 +54,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
                                 @Override
                                 public void onNext(User user) {
                                     authUser = user;
+                                    getView().onLoginStatus(true);
                                     getView().showProfile(user);
                                 }
                             }));
@@ -58,7 +62,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         }
     }
 
-    void loadLikedShots() {
+    public void loadLikedShots() {
         subscription.add(
                 dataManager.getUserLikes()
                         .subscribeOn(Schedulers.io())
@@ -89,7 +93,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
     public void checkLoginStatus() {
         boolean isLoggedIn = dataManager.isLoggedIn();
         getView().onLoginStatus(isLoggedIn);
-        if (isLoggedIn) getAuthUser(true);
+        if (isLoggedIn) getAuthUser();
         else getView().showProgress(false);
     }
 
