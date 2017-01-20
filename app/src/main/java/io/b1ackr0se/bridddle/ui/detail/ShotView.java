@@ -12,6 +12,8 @@ public interface ShotView extends BaseView {
 
     void showComments(List<Comment> comments);
 
+    void showLikeInProgress(boolean show);
+
     void showNoComment();
 
     void showError();

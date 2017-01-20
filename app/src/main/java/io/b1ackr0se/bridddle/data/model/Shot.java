@@ -89,6 +89,8 @@ public class Shot implements Parcelable {
     @Expose
     private Team team;
 
+    private boolean isLiked;
+
     /**
      *
      * @return
@@ -539,6 +541,14 @@ public class Shot implements Parcelable {
         this.team = team;
     }
 
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -571,6 +581,7 @@ public class Shot implements Parcelable {
         dest.writeStringList(this.tags);
         dest.writeParcelable(this.user, flags);
         dest.writeParcelable(this.team, flags);
+        dest.writeValue(this.isLiked);
     }
 
     public Shot() {
@@ -603,6 +614,7 @@ public class Shot implements Parcelable {
         this.tags = in.createStringArrayList();
         this.user = in.readParcelable(User.class.getClassLoader());
         this.team = in.readParcelable(Team.class.getClassLoader());
+        this.isLiked = (Boolean) in.readValue(Boolean.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Shot> CREATOR = new Parcelable.Creator<Shot>() {

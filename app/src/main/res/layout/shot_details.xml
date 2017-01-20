@@ -37,6 +37,12 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal">
 
+                <ProgressBar
+                    android:id="@+id/loading_like"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"/>
+
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/like_image"
                     android:layout_width="wrap_content"
@@ -62,7 +68,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:paddingTop="4dp"
-                android:text="195 LIKES"
                 android:textSize="12sp"/>
         </LinearLayout>
 
@@ -86,7 +91,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:paddingTop="4dp"
-                android:text="3,385 VIEWS"
                 android:textSize="12sp"/>
         </LinearLayout>
 
@@ -113,7 +117,6 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:paddingTop="4dp"
-                android:text="33 RESPONSES"
                 android:textSize="12sp"/>
         </LinearLayout>
 

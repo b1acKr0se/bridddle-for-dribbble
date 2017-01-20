@@ -4,4 +4,30 @@
     <string name="search">Search</string>
     <string name="favorite">Favorite</string>
     <string name="profile">Profile</string>
+    
+    <string name="no_like">0 LIKE</string>
+    <string name="no_view">0 VIEW</string>
+    <string name="no_comment">0 COMMENT</string>
+
+    <plurals name="like_number">
+        <item quantity="one">%s LIKE</item>
+        <item quantity="other">%s LIKES</item>
+    </plurals>
+
+    <plurals name="view_number">
+        <item quantity="one">%s VIEW</item>
+        <item quantity="other">%s VIEWS</item>
+    </plurals>
+
+    <plurals name="comment_number">
+        <item quantity="one">%s RESPONSE</item>
+        <item quantity="other">%s RESPONSES</item>
+    </plurals>
+
+    <string name="failed_to_like">Failed to like this shot</string>
+    <string name="failed_to_unlike">Failed to unlike this shot</string>
+
+    <string name="share_msg">Share this shot to</string>
+
+
 </resources>

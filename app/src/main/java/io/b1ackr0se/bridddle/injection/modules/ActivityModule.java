@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import dagger.Module;
 import dagger.Provides;
+import io.b1ackr0se.bridddle.injection.ActivityContext;
 
 @Module
 public class ActivityModule {
@@ -14,6 +15,7 @@ public class ActivityModule {
     }
 
     @Provides
+    @ActivityContext
     Activity provideActivity() {
         return activity;
     }
