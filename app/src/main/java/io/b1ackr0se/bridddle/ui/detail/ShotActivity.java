@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,7 +82,6 @@ public class ShotActivity extends TransitionBaseActivity implements OnColorClick
     @BindView(R.id.like_image) ImageView likeImageView;
     @BindView(R.id.liked_image) ImageView likedImageView;
     @BindView(R.id.like_container) FrameLayout likeContainer;
-    @BindView(R.id.loading_like) ProgressBar likeProgressBar;
 
     @Inject ShotPresenter shotPresenter;
     @Inject StringUtils stringUtils;
@@ -232,18 +230,6 @@ public class ShotActivity extends TransitionBaseActivity implements OnColorClick
         setLoadMoreFinished();
         comments.addAll(list);
         adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void showLikeInProgress(boolean show) {
-        TransitionManager.beginDelayedTransition(likeContainer);
-        if(show) {
-            likeProgressBar.setVisibility(View.VISIBLE);
-            likedImageView.setVisibility(View.INVISIBLE);
-            likeImageView.setVisibility(View.INVISIBLE);
-        } else {
-            likeProgressBar.setVisibility(View.INVISIBLE);
-        }
     }
 
     @Override

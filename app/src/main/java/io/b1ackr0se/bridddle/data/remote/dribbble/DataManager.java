@@ -72,7 +72,7 @@ public class DataManager {
         return dribbbleApi.like(authenticationManager.buildRequestHeader(), id);
     }
 
-    public Observable<Void> unlike(int id) {
+    public Observable<Like> unlike(int id) {
         return dribbbleApi.unlike(authenticationManager.buildRequestHeader(), id);
     }
 

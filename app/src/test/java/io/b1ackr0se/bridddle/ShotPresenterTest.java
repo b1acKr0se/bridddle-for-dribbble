@@ -6,12 +6,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.b1ackr0se.bridddle.data.model.Comment;
+import io.b1ackr0se.bridddle.data.model.Like;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.remote.dribbble.DataManager;
 import io.b1ackr0se.bridddle.test.common.MockModel;
@@ -20,6 +22,7 @@ import io.b1ackr0se.bridddle.ui.detail.ShotPresenter;
 import io.b1ackr0se.bridddle.ui.detail.ShotView;
 import rx.Observable;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
@@ -140,7 +143,7 @@ public class ShotPresenterTest {
 
         dataManagerLoginStatus(false);
 
-        presenter.like();
+        presenter.performLikeOrUnlike();
 
         verify(mockView).showLike(false);
         verify(mockView).performLogin();
@@ -155,7 +158,7 @@ public class ShotPresenterTest {
 
         dataManagerReturnLike(shot.getId());
 
-        presenter.like();
+        presenter.performLikeOrUnlike();
 
         verify(mockView, never()).performLogin();
         verify(mockView).showLike(true);
@@ -168,7 +171,7 @@ public class ShotPresenterTest {
 
         dataManagerLoginStatus(false);
 
-        presenter.unlike();
+        presenter.performLikeOrUnlike();
 
         verify(mockView).showLike(false);
         verify(mockView).performLogin();
@@ -177,15 +180,16 @@ public class ShotPresenterTest {
     @Test
     public void testUnlikeWhenLoggedIn() {
         Shot shot = MockModel.newShot();
+        shot.setLiked(true);
         presenter.setShot(shot);
 
         dataManagerLoginStatus(true);
 
-        doReturn(Observable.empty())
+        doReturn(Observable.just(Mockito.mock(Like.class)))
                 .when(mockDataManager)
                 .unlike(shot.getId());
 
-        presenter.unlike();
+        presenter.performLikeOrUnlike();
 
         verify(mockView, never()).performLogin();
         verify(mockView).showLike(false);
