@@ -43,7 +43,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.b1ackr0se.bridddle.MainActivity;
 import io.b1ackr0se.bridddle.R;
-import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.base.TransitionBaseActivity;
 import io.b1ackr0se.bridddle.data.model.Comment;
 import io.b1ackr0se.bridddle.data.model.Shot;
@@ -61,6 +60,7 @@ import io.b1ackr0se.bridddle.ui.widget.OnColorClickListener;
 import io.b1ackr0se.bridddle.util.DateUtils;
 import io.b1ackr0se.bridddle.util.LinkUtils;
 import io.b1ackr0se.bridddle.util.SoftKey;
+import io.b1ackr0se.bridddle.util.StringUtils;
 
 
 public class ShotActivity extends TransitionBaseActivity implements OnColorClickListener, OnUserClickListener, ShotView {
@@ -84,21 +84,17 @@ public class ShotActivity extends TransitionBaseActivity implements OnColorClick
     @BindView(R.id.like_container) FrameLayout likeContainer;
 
     @Inject ShotPresenter shotPresenter;
+    @Inject StringUtils stringUtils;
 
     private Shot shot;
     private List<Comment> comments = new ArrayList<>();
     private CommentAdapter adapter;
 
-    private boolean liked;
-
     private EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
 
     @OnClick(R.id.like)
     public void onLike() {
-        if (liked)
-            shotPresenter.unlike();
-        else
-            shotPresenter.like();
+        shotPresenter.performLikeOrUnlike();
     }
 
     @OnClick(R.id.share)
@@ -107,7 +103,7 @@ public class ShotActivity extends TransitionBaseActivity implements OnColorClick
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, shot.getHtmlUrl());
         sendIntent.setType("text/plain");
-        startActivity(Intent.createChooser(sendIntent, "Share this shot to"));
+        startActivity(Intent.createChooser(sendIntent, getString(R.string.share_msg)));
     }
 
     @OnClick(R.id.response)
@@ -217,9 +213,9 @@ public class ShotActivity extends TransitionBaseActivity implements OnColorClick
                     }
                 });
 
-        likeCount.setText(String.valueOf(shot.getLikesCount()) + " LIKES");
-        viewCount.setText(String.valueOf(shot.getViewsCount()) + " VIEWS");
-        responseCount.setText(String.valueOf(shot.getCommentsCount()) + " RESPONSES");
+        likeCount.setText(stringUtils.formatWithText(R.plurals.like_number, R.string.no_like, shot.getLikesCount()));
+        viewCount.setText(stringUtils.formatWithText(R.plurals.view_number, R.string.no_view, shot.getViewsCount()));
+        responseCount.setText(stringUtils.formatWithText(R.plurals.comment_number, R.string.no_comment, shot.getCommentsCount()));
 
         if (shot.getCreatedAt() != null) {
             shotDate.setText(DateUtils.parse(shot.getCreatedAt()));
@@ -248,7 +244,6 @@ public class ShotActivity extends TransitionBaseActivity implements OnColorClick
 
     @Override
     public void showLike(boolean liked) {
-        this.liked = liked;
         TransitionManager.beginDelayedTransition(likeContainer);
         likedImageView.setVisibility(liked ? View.VISIBLE : View.INVISIBLE);
         likeImageView.setVisibility(liked ? View.INVISIBLE : View.VISIBLE);
@@ -256,7 +251,8 @@ public class ShotActivity extends TransitionBaseActivity implements OnColorClick
 
     @Override
     public void failedToLike(boolean like) {
-        Toast.makeText(this, "Failed to " + (like ? "like" : "unlike") + " this shot", Toast.LENGTH_SHORT).show();
+        String msg = like ? getString(R.string.failed_to_like) : getString(R.string.failed_to_unlike);
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override

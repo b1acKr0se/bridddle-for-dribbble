@@ -60,6 +60,11 @@ public class ShotPresenter extends BasePresenter<ShotView> {
 
     }
 
+    public void performLikeOrUnlike() {
+        if (shot.isLiked()) unlike();
+        else like();
+    }
+
     public void checkLike() {
         if (!dataManager.isLoggedIn()) {
             getView().showLike(false);
@@ -71,13 +76,14 @@ public class ShotPresenter extends BasePresenter<ShotView> {
             return;
         }
 
-
         Subscription subscription = dataManager.liked(shot.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(like -> {
+                    shot.setLiked(like != null);
                     getView().showLike(like != null);
                 }, throwable -> {
+                    shot.setLiked(false);
                     getView().showLike(false);
                 });
         compositeSubscription.add(subscription);
@@ -97,8 +103,13 @@ public class ShotPresenter extends BasePresenter<ShotView> {
         likeSubscription = dataManager.like(shot.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(() -> getView().showLike(true))
-                .subscribe();
+                .subscribe(like -> {
+                    shot.setLiked(true);
+                    getView().showLike(true);
+                }, throwable -> {
+                    getView().showLike(false);
+                    getView().failedToLike(true);
+                });
         compositeSubscription.add(likeSubscription);
 
     }
@@ -117,8 +128,14 @@ public class ShotPresenter extends BasePresenter<ShotView> {
         unlikeSubscription = dataManager.unlike(shot.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(() -> getView().showLike(false))
-                .subscribe();
+                .doOnError(e -> getView().failedToLike(false))
+                .subscribe(like -> {
+                    shot.setLiked(false);
+                    getView().showLike(false);
+                }, throwable -> {
+                    getView().showLike(true);
+                    getView().failedToLike(false);
+                });
         compositeSubscription.add(unlikeSubscription);
     }
 

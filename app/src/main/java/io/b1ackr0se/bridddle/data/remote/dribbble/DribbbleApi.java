@@ -58,5 +58,5 @@ public interface DribbbleApi {
     Observable<Like> like(@Header(AUTH_HEADER) String authorization, @Path("id") int shotId);
 
     @DELETE("v1/shots/{id}/like")
-    Observable<Void> unlike(@Header(AUTH_HEADER) String authorization, @Path("id") int shotId);
+    Observable<Like> unlike(@Header(AUTH_HEADER) String authorization, @Path("id") int shotId);
 }

@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +29,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.b1ackr0se.bridddle.MainActivity;
 import io.b1ackr0se.bridddle.R;
-import io.b1ackr0se.bridddle.base.BaseActivity;
 import io.b1ackr0se.bridddle.base.TransitionBaseActivity;
 import io.b1ackr0se.bridddle.data.model.Shot;
 import io.b1ackr0se.bridddle.data.model.User;
@@ -40,6 +38,7 @@ import io.b1ackr0se.bridddle.ui.detail.ShotActivity;
 import io.b1ackr0se.bridddle.ui.login.DribbbleLoginActivity;
 import io.b1ackr0se.bridddle.util.LinkUtils;
 import io.b1ackr0se.bridddle.util.SoftKey;
+import io.b1ackr0se.bridddle.util.StringUtils;
 
 public class UserActivity extends TransitionBaseActivity implements UserView, OnShotClickListener {
     @BindView(R.id.nested_scroll_view) NestedScrollView nestedScrollView;
@@ -59,6 +58,7 @@ public class UserActivity extends TransitionBaseActivity implements UserView, On
     @BindView(R.id.unfollow) Button unfollow;
 
     @Inject UserPresenter presenter;
+    @Inject StringUtils stringUtils;
 
     @OnClick(R.id.more_latest_shot)
     public void showMoreShots() {
@@ -154,9 +154,9 @@ public class UserActivity extends TransitionBaseActivity implements UserView, On
             location.setVisibility(View.VISIBLE);
         }
 
-        shotCount.setText((user.getShotsCount() == null) ? "" : NumberFormat.getIntegerInstance().format(user.getShotsCount()));
-        followerCount.setText((user.getFollowersCount() == null) ? "" : NumberFormat.getIntegerInstance().format(user.getFollowersCount()));
-        likesCount.setText((user.getLikesCount() == null) ? "" : NumberFormat.getIntegerInstance().format(user.getLikesCount()));
+        shotCount.setText(stringUtils.formatWithoutText(user.getShotsCount()));
+        followerCount.setText(stringUtils.formatWithoutText(user.getFollowersCount()));
+        likesCount.setText(stringUtils.formatWithoutText(user.getLikesCount()));
 
         if (user.getBio() == null) {
             bio.setVisibility(View.GONE);
